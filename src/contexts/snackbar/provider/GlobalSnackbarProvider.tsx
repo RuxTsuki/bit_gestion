@@ -1,14 +1,6 @@
-import {} from 'react'
-
-
-export const GlobalSnackbarProvider = () => {
-  return (
-    <>
-    
-    </>
-  );
-};alSnackbarContext';
+import { ReactNode, useReducer } from 'react';
 import { globalSnackbarInitialState, globalSnackbarReducer } from './../reducer/globalSnackbar.reducer';
+import { GlobalSnackbarContext, GlobalSnackbarDispatch } from '../globalSnackbarContext';
 
 export const GlobalSnackbarProvider = ({ children }: { children: ReactNode }) => {
     const [state, dispatch] = useReducer(globalSnackbarReducer, globalSnackbarInitialState)

@@ -35,23 +35,7 @@
   --third-color: #5cb8e4;
   --aux-primary-color: #f2f2f2;
   --shade-primary-color-15: #2009212f;
-
-  --success-color-primary-100: rgb(231 253 246/1);
-  --success-color-border: rgb(67 181 147/1);
-  --success-color-primary-15: #a6dc8640;
-
-  --orange-filter: invert(57%) sepia(90%) saturate(682%) hue-rotate(353deg) brightness(95%) contrast(103%);
-
-  --error-color-primary-100: #ef6d6d;
-  --error-color-primary-15: #f2747445;
-
-  --neutral-color-primary: #646464;
-  --neutral-color-secondary: #64646465;
-  --neutral-color-third: #515050;
-
-  --border-color-primary: #cdcdcd;
-  --border-color-secondary: #b8b1b1;
-  --border-color-third: #dfdfdf;
+  --text-helper: #b8b9ba;
 
   /* backgrounds */
 
@@ -76,12 +60,6 @@
   --font-size-semi-title: 20px;
   --font-size-common: 16px;
   --font-size-small: 13px;
-  --font-size-standard: 18px;
-
-  /* others sizes */
-
-  --border-radius-primary: 8px;
-  --border-radius-secondary: 44px;
 }
 
 [data-theme="light"] {
@@ -91,12 +69,12 @@
 }
 
 /* dark theme */
-[data-theme="dark"] {
+/* [data-theme="dark"] {
   --main-text-color: var(--text-color-light);
   --bg-color: var(--bg-color-dark);
   --svg-theme: url(assets/svg/theme/moon.svg);
   --bg-color-inputs: var(--bg-color-inputs-dark);
-}
+} */
 
 ::-webkit-scrollbar {
   width: 6px;

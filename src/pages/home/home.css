@@ -1,0 +1,9 @@
+.home-container {
+    display: flex;
+    justify-content: center;
+    padding: 24px;
+}
+
+.home-container > div{
+    max-width: 966px;
+}

@@ -1,0 +1,45 @@
+.home-content {
+    display: flex;
+
+}
+
+.home-content>div:nth-child(1) {
+    flex: 1;
+    display: grid;
+    grid-template-rows: auto 25px auto;
+    gap: 30px;
+    padding-top: 40px;
+}
+
+.home-content>div:nth-child(1) button {
+    height: 36px;
+    width: 194px;
+}
+
+.home-text-helper {
+    color: var(--text-helper);
+}
+
+.title-banner span {
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.wallpaper-container {
+    display: none;
+    flex: 1;
+}
+
+.wallpaper-container img {
+    max-width: 100%;
+}
+
+@media (min-width: 992px) {
+    .wallpaper-container {
+        display: flex;
+    }
+
+    .title-banner span {
+        font-size: 38px;
+    }
+}

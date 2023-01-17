@@ -5,7 +5,7 @@ import { GlobalSnackbarActions, SnackbarTypes } from '../globalSnackbar.types';
 export const useShowGlobalSnackbar = () => {
     const dispatch = useGetGlobalSnackbarDispatch();
 
-    const openSnackbar = () => useCallback((
+    const openSnackbar = useCallback((
         message: string,
         type: SnackbarTypes = 'info',
         autoHideDuration: number = 5500

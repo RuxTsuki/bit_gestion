@@ -5,7 +5,7 @@ import { useSetCredentials } from '../hooks/useSetCredentials'
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [state, dispatch] = useReducer(authReducer, authInitialState);
-    useSetCredentials();
+    useSetCredentials(dispatch);
 
     return (
         <AuthStateContext.Provider value={state}>

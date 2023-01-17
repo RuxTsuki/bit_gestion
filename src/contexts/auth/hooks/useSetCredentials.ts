@@ -1,10 +1,8 @@
-import { useEffect } from "react"
-import { useAuthDispatch } from "./useAuthContext";
-import { AuthActions, AuthUser } from "../auth.types";
-import { PASSWORD_DEFAULT, USERNAME_DEFAULT } from "@/utils/userCredentials";
+import { useEffect, Dispatch } from 'react';
+import { AuthActions, AuthActionsType, AuthUser } from '../auth.types';
+import { PASSWORD_DEFAULT, USERNAME_DEFAULT } from '@/utils/userCredentials';
 
-export const useSetCredentials = () => {
-    const authDispatch = useAuthDispatch();
+export const useSetCredentials = (authDispatch: Dispatch<AuthActionsType>) => {
 
     useEffect(() => {
         const getUserLogged = async () => {

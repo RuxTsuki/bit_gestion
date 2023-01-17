@@ -1,6 +1,6 @@
 import { AuthProvider } from '@/contexts/auth/provider';
 import { GlobalSnackbarProvider } from '@/contexts/snackbar';
-import { Home } from './pages/home/Home';
+import { AppRouter } from './router/AppRouter';
 import './App.css'
 
 function App() {
@@ -9,7 +9,7 @@ function App() {
     <>
       <AuthProvider>
         <GlobalSnackbarProvider>
-          <Home />
+          <AppRouter />
         </GlobalSnackbarProvider>
       </AuthProvider>
     </>

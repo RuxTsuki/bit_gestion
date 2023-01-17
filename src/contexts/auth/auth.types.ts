@@ -4,10 +4,16 @@ export type AuthUser = {
     username: string;
 }
 
+export enum AuthStateType {
+    authenticated = 'authenticated',
+    notAuthenticated = 'not_authenticated'
+}
+
 export type AuthState = {
     user: AuthUser | null;
     loading: boolean;
     messageError: string;
+    state: AuthStateType;
 }
 
 export enum AuthActions {

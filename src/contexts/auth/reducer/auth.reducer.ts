@@ -1,9 +1,10 @@
-import { AuthActions, AuthActionsType, AuthState } from "../auth.types";
+import { AuthActions, AuthActionsType, AuthState, AuthStateType } from "../auth.types";
 
 export const authInitialState: AuthState = {
     loading: false,
     messageError: '',
-    user: null
+    user: null,
+    state: AuthStateType.notAuthenticated
 }
 
 export const authReducer = (
@@ -26,7 +27,8 @@ export const authReducer = (
             return {
                 messageError: '',
                 loading: false,
-                user: action.payload
+                user: action.payload,
+                state: AuthStateType.authenticated
             }
         case AuthActions.logout:
             return {
@@ -36,7 +38,8 @@ export const authReducer = (
             return {
                 messageError: action.payload,
                 loading: false,
-                user: null
+                user: null,
+                state: AuthStateType.notAuthenticated
             }
 
         default:

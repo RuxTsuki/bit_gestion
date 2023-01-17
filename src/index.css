@@ -1,70 +1,158 @@
+@font-face {
+  font-family: SignikaNegative;
+  src: url(assets/fonts/Signika_Negative/static/SignikaNegative-Medium.ttf);
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: SignikaNegative;
+  src: url(assets/fonts/Signika_Negative/static/SignikaNegative-Bold.ttf);
+  font-weight: bold;
+}
+
+/* @font-face {
+  font-family: SignikaNegative;
+  src: url(assets/fonts/Signika_Negative/static/SignikaNegative-Light.ttf);
+  font-weight: lighter;
+} */
+
 :root {
-  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
-  font-size: 16px;
-  line-height: 24px;
-  font-weight: 400;
+  --main-font-family: SignikaNegative, "Segoe UI", Tahoma, Geneva, Verdana,
+    sans-serif;
+  font-family: var(--main-font-family);
 
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: 100%;
+
+  /* general vars colors */
+
+  --white: #fff;
+
+  --primary-color: #8758ff;
+  --secondary-color: #181818;
+  --third-color: #5cb8e4;
+  --aux-primary-color: #f2f2f2;
+  --shade-primary-color-15: #2009212f;
+
+  --success-color-primary-100: rgb(231 253 246/1);
+  --success-color-border: rgb(67 181 147/1);
+  --success-color-primary-15: #a6dc8640;
+
+  --orange-filter: invert(57%) sepia(90%) saturate(682%) hue-rotate(353deg) brightness(95%) contrast(103%);
+
+  --error-color-primary-100: #ef6d6d;
+  --error-color-primary-15: #f2747445;
+
+  --neutral-color-primary: #646464;
+  --neutral-color-secondary: #64646465;
+  --neutral-color-third: #515050;
+
+  --border-color-primary: #cdcdcd;
+  --border-color-secondary: #b8b1b1;
+  --border-color-third: #dfdfdf;
+
+  /* backgrounds */
+
+  --bg-color-light: #fdfdfd;
+  --bg-color-dark: #1b1b1d;
+
+  --text-color-light: #ffffff;
+  --text-color-dark: #191729;
+
+  --bg-color-inputs-dark: #2f2f2f;
+
+  /* icons */
+
+  --icons-size-primary: 26px;
+  --icons-size-secondary: 22px;
+  --icons-size-third: 18px;
+
+  /* general font sizes  */
+
+  --font-size-title: 26px;
+  --font-size-secondary-title: 22px;
+  --font-size-semi-title: 20px;
+  --font-size-common: 16px;
+  --font-size-small: 13px;
+  --font-size-standard: 18px;
+
+  /* others sizes */
+
+  --border-radius-primary: 8px;
+  --border-radius-secondary: 44px;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
+[data-theme="light"] {
+  --main-text-color: var(--text-color-dark);
+  --bg-color: var(--bg-color-light);
+  --svg-theme: url(assets/svg/theme/sun.svg);
 }
-a:hover {
-  color: #535bf2;
+
+/* dark theme */
+[data-theme="dark"] {
+  --main-text-color: var(--text-color-light);
+  --bg-color: var(--bg-color-dark);
+  --svg-theme: url(assets/svg/theme/moon.svg);
+  --bg-color-inputs: var(--bg-color-inputs-dark);
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary-color);
+  border-radius: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--neutral-color-secondary);
+}
+
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+ul,
+li {
+  list-style: none;
+}
+
+a,
+a:visited,
+a:link,
+a:active,
+a:focus {
+  text-decoration: none;
+  color: initial;
+  outline: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  padding: 0;
+  margin: 0;
 }
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  font-family: var(--main-font-family);
+  background-color: var(--bg-color);
+  color: var(--main-text-color);
+  transition: background-color 0.25s;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+.main-text-color {
+  color: var(--main-text-color);
 }

@@ -1,15 +1,16 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
 import { AuthProvider } from '@/contexts/auth/provider';
+import { GlobalSnackbarProvider } from '@/contexts/snackbar';
+import { Home } from './pages/home/Home';
+import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <>
       <AuthProvider>
-        <h1>Hello world</h1>
+        <GlobalSnackbarProvider>
+          <Home />
+        </GlobalSnackbarProvider>
       </AuthProvider>
     </>
   )

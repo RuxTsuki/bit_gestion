@@ -1,1 +1,1 @@
-export * from './authReducer';
+export * from './auth.reducer';

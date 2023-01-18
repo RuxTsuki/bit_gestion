@@ -15,7 +15,7 @@ const initialState: FetchState<any> = {
     error: null,
 }
 
-export const useCustomFetch = <T>(url: string, fetchOpts: RequestInit | undefined) => {
+export const useCustomFetch = <T>(url: string, fetchOpts: RequestInit | undefined = {}) => {
     const [fetchState, setFetchState] = useState<FetchState<T>>(initialState);
 
     const refAbortController = useRef<AbortController>();
@@ -55,7 +55,7 @@ export const useCustomFetch = <T>(url: string, fetchOpts: RequestInit | undefine
     const fetchData = useCallback(async (
         url: string,
         fetchOpts: RequestInit | undefined
-    ): Promise<any> => {
+    ): Promise<FetchState<T>> => {
         refAbortController.current = abortController();
         try {
             setFetchState(oldState => ({ ...oldState, state: 'loading' }));
@@ -66,7 +66,7 @@ export const useCustomFetch = <T>(url: string, fetchOpts: RequestInit | undefine
 
             if (!response.ok) {
                 setFetchState({ data: null, error: new Error(response.statusText), state: 'error' });
-                return;
+                return fetchState;
             }
 
             const data = await response.json();

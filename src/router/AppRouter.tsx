@@ -1,5 +1,6 @@
 import { AuthPage } from '@/pages/auth/AuthPage';
 import { Home } from '@/pages/home/Home';
+import { Dashboard, Inventory } from '@/pages/dashboard';
 import { PageNotFound } from '@/pages/pageNotFound';
 import {
     createBrowserRouter,
@@ -16,11 +17,11 @@ const router = createBrowserRouter([
         element: <AuthPage />
     }, {
         path: 'dashboard',
-        element: <div>a</div>,
+        element: <Dashboard />,
         children: [
             {
                 path: 'inventory',
-                element: <div></div>
+                element: <Inventory />
             }
         ]
     }

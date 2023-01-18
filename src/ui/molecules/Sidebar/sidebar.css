@@ -1,0 +1,11 @@
+.sidebar-container {
+    display: flex;
+}
+
+.sidebar-open {
+    width: 230px;
+}
+
+.sidebar-shrink {
+    width: 100px;
+}

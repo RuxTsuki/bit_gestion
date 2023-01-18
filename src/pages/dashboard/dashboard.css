@@ -1,0 +1,7 @@
+.dashboard-container {
+    display: flex;
+}
+
+.dashboard-container>div:nth-child(2) {
+    flex: 1;
+}

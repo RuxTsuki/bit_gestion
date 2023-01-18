@@ -45,16 +45,9 @@
   --text-color-light: #ffffff;
   --text-color-dark: #191729;
 
-  --bg-color-inputs-dark: #2f2f2f;
-
-  /* icons */
-
-  --icons-size-primary: 26px;
-  --icons-size-secondary: 22px;
-  --icons-size-third: 18px;
+  --neutral-color-secondary: #e0e0e0;
 
   /* general font sizes  */
-
   --font-size-title: 26px;
   --font-size-secondary-title: 22px;
   --font-size-semi-title: 20px;
@@ -135,4 +128,22 @@ body {
 
 .main-text-color {
   color: var(--main-text-color);
+}
+
+/* line */
+
+.custom-line {
+  width: 100%;
+  height: 44px;
+  display: grid;
+  position: relative;
+}
+
+.custom-line:after {
+  border-bottom: 1px solid var(--neutral-color-secondary);
+  width: 100%;
+  height: 50%;
+  content: " ";
+  position: absolute;
+  display: flex;
 }

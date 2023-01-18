@@ -1,11 +1,14 @@
 import { Box, Button, FormHelperText, TextField } from '@mui/material';
 import InventoryImg from '@/assets/images/InventoryManagement.png';
 import './home_content.css';
+import { useNavigate } from 'react-router-dom';
 
 export const HomeContent = () => {
 
+    const navigate = useNavigate();
+
     const getStarted = () => {
-        //navigate
+        navigate('/login');
     }
 
     return (

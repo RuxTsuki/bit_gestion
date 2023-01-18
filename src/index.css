@@ -60,14 +60,17 @@
   --font-size-semi-title: 20px;
   --font-size-common: 16px;
   --font-size-small: 13px;
+
+  --bg-color: var(--bg-color-light);
+  --main-text-color: var(--text-color-dark);
 }
 
-[data-theme="light"] {
+/* [data-theme="light"] {
   --main-text-color: var(--text-color-dark);
   --bg-color: var(--bg-color-light);
   --svg-theme: url(assets/svg/theme/sun.svg);
 }
-
+ */
 /* dark theme */
 /* [data-theme="dark"] {
   --main-text-color: var(--text-color-light);
@@ -108,7 +111,6 @@ a:link,
 a:active,
 a:focus {
   text-decoration: none;
-  color: initial;
   outline: 0;
 }
 

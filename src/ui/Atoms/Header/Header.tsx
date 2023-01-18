@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { EnerbitLogo } from '../svgs';
 import './header.css';
 
@@ -9,8 +10,8 @@ export const Header = () => {
             </div>
 
             <div className="menu-items">
-                <span>Home</span>
-                <span>About</span>
+                <Link to={'/'}>Inicio</Link>
+                <Link to={'/'}>About</Link>
             </div>
         </header>
     )

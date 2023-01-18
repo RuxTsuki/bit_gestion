@@ -1,0 +1,21 @@
+.container-password-reset {
+    padding: 30px;
+    display: flex;
+    place-content: center;
+}
+
+.container-password-reset>div {
+    width: 940px;
+    display: grid;
+    gap: 66px;
+}
+
+@media screen and (max-width: 992px) {
+    .container-password-reset>div {
+        max-width: 400px;
+    }
+}
+
+.container-header {
+    padding-bottom: 32px;
+}

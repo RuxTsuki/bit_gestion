@@ -1,3 +1,6 @@
+import { useCustomFetch } from '@/customHooks';
+import { MeterCollectionResponse } from '@/models';
+import { getInventory } from '@/services';
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 
 const columns: GridColDef[] = [
@@ -34,8 +37,11 @@ const rows = [
 ];
 
 export const Inventory = () => {
+    const [fetchState, fetchData] = useCustomFetch<MeterCollectionResponse>(getInventory());
+    console.log(fetchState);
+    console.log('wtf');
 
-    return (    
+    return (
         <div>
             <div style={{ height: 400, width: '100%' }}>
                 <DataGrid

@@ -4,4 +4,7 @@
 
 .dashboard-container>div:nth-child(2) {
     flex: 1;
+    display: flex;
+    justify-content: center;
+    padding: 28px;
 }

@@ -1,0 +1,34 @@
+.search-data-grid-container {
+    display: flex;
+    flex-direction: column;
+    margin-left: auto;
+    gap: 10px;
+    max-width: 650px;
+    padding-block: 18px;
+}
+
+.search-data-grid-container .search-container {
+    flex: 2;
+    order: 2;
+}
+
+.search-data-grid-container .search-filter {
+    order: 1;
+    flex: 1;
+    max-width: 190px;
+    width: 100%;
+}
+
+@media screen and (min-width: 768px) {
+    .search-data-grid-container {
+        flex-direction: row;
+    }
+
+    .search-data-grid-container .search-container {
+        order: 1;
+    }
+
+    .search-data-grid-container .search-filter {
+        order: 2;
+    }
+}

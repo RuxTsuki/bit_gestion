@@ -1,0 +1,24 @@
+.inventory-container {
+    max-width: 1260px;
+    width: 100%;
+}
+
+.inventory-header {
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-block: 16px;
+}
+
+.inventory-header button {
+    max-width: 200px;
+}
+
+@media screen and (min-width: 768px) {
+    .inventory-header {
+        flex-direction: row;
+    }
+
+
+}

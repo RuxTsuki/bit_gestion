@@ -50,6 +50,7 @@ export const CustomFieldBasic = ({ title, error, register, type = 'text', disabl
                 disabled={disabled}
                 helperText={error}
                 error={!!error}
+                InputLabelProps={{ shrink: true }}
                 fullWidth
                 variant="outlined"
                 size="small" />

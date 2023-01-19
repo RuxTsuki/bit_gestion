@@ -3,6 +3,7 @@ import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
 import { useState } from 'react';
 import { MeterItemResponse } from '@/models';
+import { InventoryGridItemView } from '../DataGrids';
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -19,12 +20,14 @@ const style = {
 
 type Props = {
     item: MeterItemResponse,
+    open: boolean,
+    setOpen: (open: boolean) => void
     action: 'view' | 'edit' | 'delete',
     actionFunc: () => void
 }
 
-export const ModalDataGridItem = ({ item, action, actionFunc }: Props) => {
-    const [open, setOpen] = useState(false);
+export const ModalDataGridItem = ({ item, action, open = false, setOpen, actionFunc }: Props) => {
+
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
@@ -37,7 +40,7 @@ export const ModalDataGridItem = ({ item, action, actionFunc }: Props) => {
                 aria-describedby="modal-modal-description"
             >
                 <Box sx={style}>
-                    Hola
+                    <InventoryGridItemView item={item} />
                 </Box>
             </Modal>
         </div>

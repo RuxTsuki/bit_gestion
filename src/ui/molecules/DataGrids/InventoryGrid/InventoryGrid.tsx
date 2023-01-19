@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { SearchOutlined, EditOutlined, DeleteOutline } from '@mui/icons-material';
 import { DataGrid, GridColDef, GridRowParams } from '@mui/x-data-grid';
 import { IconButton } from '@mui/material';
@@ -7,10 +7,13 @@ import { MeterItemResponse } from '@/models';
 import './inventory_grid.css';
 
 
-export const InventoryGridActions = ({ row }: Partial<GridRowParams>) => {
+// increible 2horas viendo por que se moria
+const InventoryGridActions = memo(({ row }: Partial<GridRowParams>) => {
+    const [open, setOpen] = useState(false);
 
     const showRow = () => {
         console.log(row);
+        setOpen(true);
     }
 
     return (
@@ -27,8 +30,17 @@ export const InventoryGridActions = ({ row }: Partial<GridRowParams>) => {
                 <DeleteOutline />
             </IconButton>
 
-            <ModalDataGridItem action='view' actionFunc={() => { }} item={row} />
+            <ModalDataGridItem action='view' setOpen={setOpen} open={open} actionFunc={() => { }} item={row} />
         </div>
+    );
+})
+
+
+export const RenderInventoryGridActions = ({ row }: Partial<GridRowParams>) => {
+    return (
+        <>
+            <InventoryGridActions row={row} />
+        </>
     );
 }
 
@@ -112,7 +124,7 @@ export const InventoryGrid = ({ data = [] }: { data: MeterItemResponse[] }) => {
             field: "none",
             headerName: "Actions",
             width: 180,
-            renderCell: InventoryGridActions
+            renderCell: RenderInventoryGridActions
         }
     ];
 

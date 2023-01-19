@@ -1,12 +1,10 @@
-import { FormControl, FormHelperText, InputAdornment, OutlinedInput } from '@mui/material'
-import { ChangeEvent } from 'react'
+import { TextField } from '@mui/material'
 import { UseFormRegisterReturn } from 'react-hook-form';
 import './input_with_icon.css';
+
 type Props = {
     title: string,
     value?: string | number,
-    onChange?:
-    (value: ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | undefined) => void,
     disabled?: boolean,
     type?: 'text' | 'number',
     paddingTitle?: string;
@@ -14,11 +12,17 @@ type Props = {
     error?: string;
 }
 
-export const CustomFieldBasic = ({ title, error, register, paddingTitle = '10px', type = 'text', disabled = false }: Props) => {
+/**
+ * Field to handle data with lib custom forms
+ * @param param0 
+ * @returns 
+ */
+export const CustomFieldBasic = ({ title, error, register, type = 'text', disabled = false }: Props) => {
 
     return (
         <>
-            <FormControl fullWidth variant="outlined">
+            {/* other design for input */}
+            {/* <FormControl fullWidth variant="outlined">
                 <OutlinedInput
                     size="small"
                     type={type}
@@ -37,7 +41,18 @@ export const CustomFieldBasic = ({ title, error, register, paddingTitle = '10px'
                     }
                 />
                 <FormHelperText error>{error}</FormHelperText>
-            </FormControl>
+            </FormControl> */}
+
+            <TextField
+                label={title}
+                type={type}
+                inputProps={{ ...register }}
+                disabled={disabled}
+                helperText={error}
+                error={!!error}
+                fullWidth
+                variant="outlined"
+                size="small" />
         </>
     )
 }

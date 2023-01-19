@@ -1,9 +1,9 @@
 import { MeterItemResponse, TypeOfView } from "@/models";
 import { CustomFieldBasic } from "@/ui/Atoms/Inputs";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { ItemHeaderActions } from "./ItemHeaderActions";
-import './inventory_grid_item_view.css';
 import { TextField } from '@mui/material';
+import './inventory_grid_item_view.css';
 
 type Props = {
     item: MeterItemResponse;
@@ -19,7 +19,7 @@ const patternDate = RegExp(/^(?:\d{4})-(?:\d{2})-(?:\d{2})T(?:\d{2}):(?:\d{2}):(
 
 export const InventoryGridItemView = ({ item, view, setView }: Props) => {
 
-    const { register, handleSubmit, getValues, reset, clearErrors, formState: { errors, isValid } } = useForm<MeterItemResponse>({
+    const { register, control, handleSubmit, getValues, reset, clearErrors, formState: { errors, isValid } } = useForm<MeterItemResponse>({
         defaultValues: { ...item }
     });
 
@@ -98,11 +98,23 @@ export const InventoryGridItemView = ({ item, view, setView }: Props) => {
                                     }
                                 })}
                             />
-                            <CustomFieldBasic
-                                title={'Producto Agregado'}
-                                disabled={view !== 'edit'}
-                                register={register('created_at')}
-                            />
+                            {/* <Controller
+                                control={control}
+                                name='created_at'
+                                render={({
+                                    field: { onChange, onBlur, value, name, ref },
+                                    fieldState: { invalid, isTouched, isDirty, error }
+                                }) => {
+                                    return (
+                                        < input type="datetime-local"
+                                            value={value}
+                                            onBlur={onBlur}
+                                            onChange={onChange}
+                                        />
+                                    )
+                                }
+                                }
+                            /> */}
                         </div>
 
                         <div className="second-section">
@@ -156,11 +168,31 @@ export const InventoryGridItemView = ({ item, view, setView }: Props) => {
                     </div>
 
                     <div className="item-financial-movements">
-                        <CustomFieldBasic
+
+
+                        {/* <CustomFieldBasic
                             title={'Comprado en'}
                             disabled={view !== 'edit'}
                             register={register('purchase')}
-                        />
+                        /> */}
+                        {/* <Controller
+                            control={control}
+                            name='purchase'
+                            render={({
+                                field: { onChange, onBlur, value, name, ref },
+                                fieldState: { invalid, isTouched, isDirty, error }
+                            }) => {
+                                return (
+                                    < input type="datetime-local"
+                                        value={value}
+                                        onBlur={onBlur}
+                                        onChange={onChange}
+                                    />
+                                )
+                            }
+                            }
+                        /> */}
+
                         <CustomFieldBasic
                             title={'Ventas'}
                             disabled={view !== 'edit'}

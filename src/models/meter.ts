@@ -50,3 +50,5 @@ export interface MeterErrorDetail {
 export interface MeterErrorResponse {
     detail: MeterErrorDetail[];
 }
+
+export type TypeOfView = 'edit' | 'delete' | 'view';

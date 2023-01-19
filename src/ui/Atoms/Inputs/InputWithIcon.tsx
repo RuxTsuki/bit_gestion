@@ -15,7 +15,7 @@ type Props = {
     register?: UseFormRegisterReturn;
 }
 
-export const InputWithIcon = ({ title, onChange, value, register, paddingTitle = '10px', type = 'text', disabled = false }: Props) => {
+export const CustomFieldBasic = ({ title, onChange, value, register, paddingTitle = '10px', type = 'text', disabled = false }: Props) => {
 
     return (
         <>
@@ -41,4 +41,4 @@ export const InputWithIcon = ({ title, onChange, value, register, paddingTitle =
     )
 }
 
-export default InputWithIcon
+export default CustomFieldBasic

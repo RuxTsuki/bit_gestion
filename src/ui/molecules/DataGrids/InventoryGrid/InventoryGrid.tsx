@@ -3,14 +3,14 @@ import { SearchOutlined, EditOutlined, DeleteOutline } from '@mui/icons-material
 import { DataGrid, GridColDef, GridRowParams } from '@mui/x-data-grid';
 import { IconButton } from '@mui/material';
 import { ModalDataGridItem } from '@/ui/molecules/ModalDataGridItem';
-import { MeterItemResponse } from '@/models';
+import { MeterItemResponse, TypeOfView } from '@/models';
 import './inventory_grid.css';
 
 
 // increible 2horas viendo por que se moria
 const InventoryGridActions = memo(({ row }: Partial<GridRowParams>) => {
     const [open, setOpen] = useState(false);
-    const [view, setView] = useState<'edit' | 'delete' | 'view'>('view');
+    const [view, setView] = useState<TypeOfView>('view');
 
     const showRow = () => {
         console.log(row);

@@ -1,4 +1,4 @@
-import { MeterItemResponse, TypeOfView } from "@/models";
+import { MeterItemForUpdate, MeterItemResponse, TypeOfView } from "@/models";
 import { CustomFieldBasic } from "@/ui/Atoms/Inputs";
 import { Controller, useForm } from "react-hook-form";
 import { ItemHeaderActions } from "./ItemHeaderActions";
@@ -30,6 +30,21 @@ export const InventoryGridItemView = ({ item, view, setView }: Props) => {
     const handleSave = () => {
         console.log('values', getValues());
         console.log('Errors', errors, isValid);
+
+        if (!isValid) return;
+
+        const { id, ...values } = { ...getValues() };
+        let valuesToSave: MeterItemForUpdate = {};
+
+        for (const [key, value] of Object.entries(values)) {
+            if (value !== '')
+                valuesToSave = { ...valuesToSave, [key]: value }
+        }
+
+        console.log({
+            values: valuesToSave,
+            id
+        })
     }
 
     const handleDelete = () => {

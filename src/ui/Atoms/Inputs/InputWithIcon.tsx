@@ -23,8 +23,6 @@ export const InputWithIcon = ({ title, onChange, value, register, paddingTitle =
                 <OutlinedInput
                     size="small"
                     type={type}
-                    onChange={onChange}
-                    value={value}
                     disabled={disabled}
                     {...register}
                     startAdornment={

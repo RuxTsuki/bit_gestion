@@ -3,19 +3,20 @@ import { InputWithIcon } from "@/ui/Atoms/Inputs";
 import './inventory_grid_item_view.css';
 import { useForm } from "react-hook-form";
 import { FormControl, IconButton, InputAdornment, Menu, OutlinedInput, Box, MenuList, MenuItem } from "@mui/material";
-import { DeleteOutline, EditOutlined, SettingsOutlined } from "@mui/icons-material";
+import { CancelOutlined, DeleteOutline, EditOutlined, SaveOutlined, SettingsOutlined } from "@mui/icons-material";
 import { MouseEvent, useState } from "react";
 
 type Props = {
     item: MeterItemResponse;
-    view: 'edit' | 'delete' | 'view'
+    view: 'edit' | 'delete' | 'view',
+    setView: (view: 'edit' | 'delete' | 'view') => void;
 }
 
-export const InventoryGridItemView = ({ item, view }: Props) => {
+export const InventoryGridItemView = ({ item, view, setView }: Props) => {
 
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-    const { register, handleSubmit, watch, formState: { errors } } = useForm({
-        defaultValues: item
+    const { register, handleSubmit, reset, watch, formState: { errors } } = useForm({
+        defaultValues: { ...item }
     });
 
     const open = Boolean(anchorEl);
@@ -55,6 +56,20 @@ export const InventoryGridItemView = ({ item, view }: Props) => {
         }
     };
 
+    const handleEdit = () => {
+        setView('edit');
+    }
+
+    const handleDelete = () => {
+
+    }
+
+    const handleCancel = () => {
+        reset({ ...item });
+        setView('view');
+        console.log('wtf')
+    }
+
     return (
         <div className="inventory-item-contianer">
             <div className="item-description-container">
@@ -85,15 +100,32 @@ export const InventoryGridItemView = ({ item, view }: Props) => {
                     >
 
                         <MenuList>
-                            <MenuItem>
-                                <EditOutlined />
-                                Editar
-                            </MenuItem>
+                            {
+                                view !== 'edit' ?
+                                    <div>
+                                        <MenuItem onClick={handleEdit}>
+                                            <EditOutlined />
+                                            Editar
+                                        </MenuItem>
 
-                            <MenuItem>
-                                <DeleteOutline />
-                                Eliminar
-                            </MenuItem>
+                                        <MenuItem onClick={handleDelete}>
+                                            <DeleteOutline />
+                                            Eliminar
+                                        </MenuItem>
+                                    </div>
+                                    :
+                                    <div>
+                                        <MenuItem onClick={handleEdit}>
+                                            <SaveOutlined />
+                                            Save
+                                        </MenuItem>
+
+                                        <MenuItem onClick={handleCancel}>
+                                            <CancelOutlined />
+                                            Cancel
+                                        </MenuItem>
+                                    </div>
+                            }
                         </MenuList>
                     </Menu>
                 </div>

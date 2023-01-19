@@ -1,7 +1,5 @@
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
-import { useState } from 'react';
 import { MeterItemResponse } from '@/models';
 import { InventoryGridItemView } from '../DataGrids';
 import { IconButton } from '@mui/material';
@@ -22,13 +20,14 @@ const style = {
 
 type Props = {
     item: MeterItemResponse,
+    view: 'view' | 'edit' | 'delete',
     open: boolean,
-    setOpen: (open: boolean) => void
-    action: 'view' | 'edit' | 'delete',
+    setOpen: (open: boolean) => void,
+    setView: (view: 'edit' | 'delete' | 'view') => void;
     actionFunc: () => void
 }
 
-export const ModalDataGridItem = ({ item, action, open = false, setOpen, actionFunc }: Props) => {
+export const ModalDataGridItem = ({ item, view, open = false, setView, setOpen, actionFunc }: Props) => {
 
     const handleOpen = () => setOpen(true);
     const handleClose = (_: any, reason: string) => {
@@ -53,7 +52,7 @@ export const ModalDataGridItem = ({ item, action, open = false, setOpen, actionF
                         <CloseOutlined />
                     </IconButton>
 
-                    <InventoryGridItemView item={item} view={action} />
+                    <InventoryGridItemView item={item} view={view} setView={setView} />
                 </Box>
             </Modal>
         </div>

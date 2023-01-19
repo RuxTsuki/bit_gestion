@@ -10,6 +10,7 @@ import './inventory_grid.css';
 // increible 2horas viendo por que se moria
 const InventoryGridActions = memo(({ row }: Partial<GridRowParams>) => {
     const [open, setOpen] = useState(false);
+    const [view, setView] = useState<'edit' | 'delete' | 'view'>('view');
 
     const showRow = () => {
         console.log(row);
@@ -30,7 +31,12 @@ const InventoryGridActions = memo(({ row }: Partial<GridRowParams>) => {
                 <DeleteOutline />
             </IconButton>
 
-            <ModalDataGridItem action='view' setOpen={setOpen} open={open} actionFunc={() => { }} item={row} />
+            <ModalDataGridItem
+                view={view}
+                setView={setView}
+                open={open}
+                setOpen={setOpen}
+                actionFunc={() => { }} item={row} />
         </div>
     );
 })
@@ -134,6 +140,7 @@ export const InventoryGrid = ({ data = [] }: { data: MeterItemResponse[] }) => {
                 rows={rows}
                 columns={columns}
                 pageSize={5}
+                /*  loading={loadingState === 'loading'} */
                 rowsPerPageOptions={[5]}
                 disableSelectionOnClick
             />

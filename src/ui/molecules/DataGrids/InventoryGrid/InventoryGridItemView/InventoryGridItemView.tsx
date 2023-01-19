@@ -2,7 +2,7 @@ import { MeterItemResponse } from "@/models";
 import { InputWithIcon } from "@/ui/Atoms/Inputs";
 import './inventory_grid_item_view.css';
 import { useForm } from "react-hook-form";
-import { FormControl, IconButton, InputAdornment, Menu, OutlinedInput, Box, MenuList, MenuItem } from "@mui/material";
+import { Button, IconButton, InputAdornment, Menu, OutlinedInput, Box, MenuList, MenuItem } from "@mui/material";
 import { CancelOutlined, DeleteOutline, EditOutlined, SaveOutlined, SettingsOutlined } from "@mui/icons-material";
 import { MouseEvent, useState } from "react";
 
@@ -78,56 +78,35 @@ export const InventoryGridItemView = ({ item, view, setView }: Props) => {
                 <div className="item-header">
                     <h2>Acerca Del Producto</h2>
 
-                    <IconButton
-                        onClick={handleClick}
-                        size="small"
-                        aria-controls={open ? 'account-menu' : undefined}
-                        aria-haspopup="true"
-                        aria-expanded={open ? 'true' : undefined}
-                    >
-                        <SettingsOutlined />
-                    </IconButton>
+                    <div>
+                        {
+                            view !== 'edit'
+                                ? <>
+                                    <IconButton
+                                        onClick={handleEdit}
+                                        size="small"
+                                    >
+                                        <EditOutlined />
+                                    </IconButton>
 
-                    <Menu
-                        anchorEl={anchorEl}
-                        id="account-menu"
-                        open={open}
-                        onClose={handleClose}
-                        onClick={handleClose}
-                        PaperProps={paperProps}
-                        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-                        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-                    >
+                                    <IconButton
+                                        onClick={handleDelete}
+                                        size="small"
+                                    >
+                                        <DeleteOutline />
+                                    </IconButton>
+                                </>
+                                : <>
+                                    <Button variant="outlined" size="small">
+                                        Save
+                                    </Button>
 
-                        <MenuList>
-                            {
-                                view !== 'edit' ?
-                                    <div>
-                                        <MenuItem onClick={handleEdit}>
-                                            <EditOutlined />
-                                            Editar
-                                        </MenuItem>
-
-                                        <MenuItem onClick={handleDelete}>
-                                            <DeleteOutline />
-                                            Eliminar
-                                        </MenuItem>
-                                    </div>
-                                    :
-                                    <div>
-                                        <MenuItem onClick={handleEdit}>
-                                            <SaveOutlined />
-                                            Save
-                                        </MenuItem>
-
-                                        <MenuItem onClick={handleCancel}>
-                                            <CancelOutlined />
-                                            Cancel
-                                        </MenuItem>
-                                    </div>
-                            }
-                        </MenuList>
-                    </Menu>
+                                    <Button onClick={handleCancel} variant="outlined" color="error" size="small">
+                                        Cancel
+                                    </Button>
+                                </>
+                        }
+                    </div>
                 </div>
 
                 <div className="item-specification">

@@ -4,8 +4,17 @@
 
 .inventory-item-contianer .item-header {
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
-    padding-block: 8px;
+    padding-block: 10px;
+    gap: 10px;
+}
+
+.inventory-item-contianer .item-header>div {
+    display: flex;
+    gap: 4px;
+    height: fit-content;
+    align-self: flex-end;
 }
 
 .inventory-item-contianer .first-section,
@@ -21,17 +30,18 @@
 }
 
 .inventory-item-contianer .item-specification {
-    overflow: auto;
-    padding-right: 6px;
     display: flex;
     flex-direction: column;
+    max-height: 560px;
+    overflow: auto;
+    padding-right: 6px;
     gap: 10px;
 }
 
 .inventory-item-contianer .item-data {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 16px;
 }
 
 @media screen and (min-width: 992px) {
@@ -40,6 +50,10 @@
     }
 
     .inventory-item-contianer .item-data {
+        flex-direction: row;
+    }
+
+    .inventory-item-contianer .item-header {
         flex-direction: row;
     }
 }

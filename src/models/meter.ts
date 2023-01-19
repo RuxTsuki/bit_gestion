@@ -1,8 +1,16 @@
+export type StorageSystemOption = 'interno' | 'externo' | '';
+
+export type OwnerOption = 'RF' | 'OR' | '';
+
+export type ConditionOption = 'nuevo' | 'usado' | '';
+
+export type ConnectionTypeOption = 'directa' | 'semi-directa' | 'indirecta' | '';
+
 export interface MeterItemForUpdate {
-    connection_type?: string,
-    storage_system?: string,
-    condition?: string,
-    owner?: string,
+    connection_type?: ConnectionTypeOption,
+    storage_system?: StorageSystemOption,
+    condition?: ConditionOption,
+    owner?: OwnerOption,
     serial?: string,
     location?: string,
     purchase?: string,
@@ -14,11 +22,11 @@ export interface MeterItemForUpdate {
 }
 
 export interface MeterItemResponse {
+    connection_type: ConnectionTypeOption,
+    storage_system: StorageSystemOption,
+    condition: ConditionOption,
+    owner: OwnerOption,
     serial: number,
-    connection_type: string,
-    storage_system: string,
-    condition: string,
-    owner: string,
     location: string,
     manufacturer: string,
     purchase: string,

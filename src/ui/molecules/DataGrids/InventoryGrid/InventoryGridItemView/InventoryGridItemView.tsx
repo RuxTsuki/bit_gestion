@@ -1,4 +1,4 @@
-import { MeterItemForUpdate, MeterItemResponse, TypeOfView } from "@/models";
+import { ConditionOption, ConnectionTypeOption, MeterItemForUpdate, MeterItemResponse, OwnerOption, StorageSystemOption, TypeOfView } from "@/models";
 import { CustomFieldBasic } from "@/ui/Atoms/Inputs";
 import { Controller, useForm } from "react-hook-form";
 import { ItemHeaderActions } from "./ItemHeaderActions";
@@ -6,6 +6,8 @@ import { patchProduct } from '@/services';
 import './inventory_grid_item_view.css';
 import { useCustomFetch } from "@/customHooks";
 import { useShowGlobalSnackbar } from "@/contexts/snackbar";
+import { InventoryGridStateActions, useInventoryGridDispatch } from "@/contexts/dataGrids/inventoryGrid";
+import { CustomSelect } from "@/ui/Atoms/CustomSelect";
 
 type Props = {
     item: MeterItemResponse;
@@ -16,7 +18,12 @@ type Props = {
 
 const patternString = RegExp(/^\w+/g);
 
-const patternNumber = RegExp(/^\d+$/);
+const patternNumber = RegExp(/^[1-9]\d*(\.\d+)?$/);
+
+const listTypeConnection: ConnectionTypeOption[] = ['directa', 'semi-directa', 'indirecta', ''];
+const listConditionOption: ConditionOption[] = ['nuevo', 'usado', ''];
+const listOwnerOption: OwnerOption[] = ['OR', 'RF', ''];
+const listStorageSystemOption: StorageSystemOption[] = ['externo', 'interno', ''];
 
 const patternDate = RegExp(/^(?:\d{4})-(?:\d{2})-(?:\d{2})T(?:\d{2}):(?:\d{2}):(?:\d{2}(?:\.\d*)?)(?:(?:-(?:\d{2}):(?:\d{2})|Z)?)$/)
 
@@ -24,6 +31,7 @@ export const InventoryGridItemView = ({ item, view, setView, closeModal }: Props
 
     const [fetchEditState, makeFetchToEdit] = useCustomFetch();
     const showSnackbar = useShowGlobalSnackbar();
+    const dispatch = useInventoryGridDispatch();
 
     const { register, control, handleSubmit, getValues, reset, clearErrors, formState: { errors, isValid } } = useForm<MeterItemResponse>({
         defaultValues: { ...item }
@@ -34,8 +42,6 @@ export const InventoryGridItemView = ({ item, view, setView, closeModal }: Props
     }
 
     const handleSave = async () => {
-        console.log('values', getValues());
-        console.log('Errors', errors, isValid);
 
         if (!isValid) return;
 
@@ -50,12 +56,15 @@ export const InventoryGridItemView = ({ item, view, setView, closeModal }: Props
         const { url, fetchOpts } = patchProduct(id, valuesToSave)
         const response = await makeFetchToEdit(url, fetchOpts);
 
-        if (response.error) {
-            closeModal('', 'CloseByAction');
-            return;
+        if (!response.error) {
+            showSnackbar('Registro Editado', 'success');
+            dispatch({
+                type: InventoryGridStateActions.updateDataItem,
+                payload: { id, dataItem: valuesToSave }
+            })
         }
 
-        console.log(response);
+        closeModal('', 'CloseByAction');
     }
 
     const handleDelete = () => {
@@ -117,6 +126,28 @@ export const InventoryGridItemView = ({ item, view, setView, closeModal }: Props
                                     }
                                 })}
                             />
+
+                            <Controller
+                                control={control}
+                                name='connection_type'
+                                render={({
+                                    field: { onChange, onBlur, value, name, ref },
+                                    fieldState: { invalid, isTouched, isDirty, error }
+                                }) => {
+                                    return (
+                                        <CustomSelect
+                                            label="Tipo De Conexion"
+                                            disabled={view !== 'edit'}
+                                            value={value}
+                                            onChange={onChange}
+                                            onBlur={onBlur}
+                                            list={listTypeConnection}
+                                        />
+                                    )
+                                }
+                                }
+                            />
+
                             <CustomFieldBasic
                                 title={'Sistema de Almacen'}
                                 disabled={view !== 'edit'}

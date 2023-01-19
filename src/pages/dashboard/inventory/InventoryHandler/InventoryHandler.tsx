@@ -12,7 +12,7 @@ import { InventoryGridStateActions } from '@/contexts/dataGrids/inventoryGrid';
 import '../inventory.css';
 
 export const InventoryHandler = () => {
-    const { data } = useInventoryGridState();
+    const { data: { items } } = useInventoryGridState();
     const dispatch = useInventoryGridDispatch();
     const [fetchState] = useCustomFetch<MeterCollectionResponse>(getInventory());
     const [dataToShow, setDataToShow] = useState<MeterItemResponse[]>([])
@@ -32,6 +32,11 @@ export const InventoryHandler = () => {
         setDataToShow(dataFiltered);
     }
 
+    useEffect(() => {
+      setDataToShow(items);
+    }, [items])
+    
+
     return (
         <>
             <header className='inventory-header'>
@@ -44,7 +49,7 @@ export const InventoryHandler = () => {
 
             <div className='custom-line'></div>
 
-            <SearchForDataGrids onSearch={onSearch} gridData={data.items} valueToFilter='serial' />
+            <SearchForDataGrids onSearch={onSearch} gridData={items} valueToFilter='serial' />
 
             <div style={{ height: 400, width: '100%' }}>
                 <InventoryGrid data={dataToShow} />

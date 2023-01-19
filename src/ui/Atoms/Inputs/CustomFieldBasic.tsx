@@ -1,9 +1,7 @@
-import { FormControl, FormControlTypeMap, IconButton, InputAdornment, InputProps, OutlinedInput, OutlinedInputProps } from '@mui/material'
-import { OverridableComponent } from '@mui/material/OverridableComponent'
-import React, { ChangeEvent, ReactElement } from 'react'
-import { FieldValues, UseFormRegister, UseFormRegisterReturn } from 'react-hook-form';
+import { FormControl, FormHelperText, InputAdornment, OutlinedInput } from '@mui/material'
+import { ChangeEvent } from 'react'
+import { UseFormRegisterReturn } from 'react-hook-form';
 import './input_with_icon.css';
-
 type Props = {
     title: string,
     value?: string | number,
@@ -13,9 +11,10 @@ type Props = {
     type?: 'text' | 'number',
     paddingTitle?: string;
     register?: UseFormRegisterReturn;
+    error?: string;
 }
 
-export const CustomFieldBasic = ({ title, onChange, value, register, paddingTitle = '10px', type = 'text', disabled = false }: Props) => {
+export const CustomFieldBasic = ({ title, error, register, paddingTitle = '10px', type = 'text', disabled = false }: Props) => {
 
     return (
         <>
@@ -23,8 +22,9 @@ export const CustomFieldBasic = ({ title, onChange, value, register, paddingTitl
                 <OutlinedInput
                     size="small"
                     type={type}
+                    inputProps={{ ...register }}
                     disabled={disabled}
-                    {...register}
+                    error={!!error}
                     startAdornment={
                         <InputAdornment
                             className='input-Adornment-title'
@@ -36,6 +36,7 @@ export const CustomFieldBasic = ({ title, onChange, value, register, paddingTitl
                         </InputAdornment>
                     }
                 />
+                <FormHelperText error>{error}</FormHelperText>
             </FormControl>
         </>
     )

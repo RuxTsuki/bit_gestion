@@ -3,6 +3,7 @@ import { CustomFieldBasic } from "@/ui/Atoms/Inputs";
 import { useForm } from "react-hook-form";
 import { ItemHeaderActions } from "./ItemHeaderActions";
 import './inventory_grid_item_view.css';
+import { TextField } from '@mui/material';
 
 type Props = {
     item: MeterItemResponse;
@@ -10,9 +11,15 @@ type Props = {
     setView: (view: TypeOfView) => void;
 }
 
+const patternString = RegExp(/^\w+/g);
+
+const patternNumber = RegExp(/^\d+$/);
+
+const patternDate = RegExp(/^(?:\d{4})-(?:\d{2})-(?:\d{2})T(?:\d{2}):(?:\d{2}):(?:\d{2}(?:\.\d*)?)(?:(?:-(?:\d{2}):(?:\d{2})|Z)?)$/)
+
 export const InventoryGridItemView = ({ item, view, setView }: Props) => {
 
-    const { register, getValues, reset, watch, formState: { errors } } = useForm({
+    const { register, handleSubmit, getValues, reset, clearErrors, formState: { errors, isValid } } = useForm<MeterItemResponse>({
         defaultValues: { ...item }
     });
 
@@ -21,7 +28,8 @@ export const InventoryGridItemView = ({ item, view, setView }: Props) => {
     }
 
     const handleSave = () => {
-        console.log(getValues());
+        console.log('values', getValues());
+        console.log('Errors', errors, isValid);
     }
 
     const handleDelete = () => {
@@ -30,6 +38,7 @@ export const InventoryGridItemView = ({ item, view, setView }: Props) => {
 
     const handleCancel = () => {
         reset({ ...item });
+        clearErrors();
         setView('view');
     }
 
@@ -45,38 +54,52 @@ export const InventoryGridItemView = ({ item, view, setView }: Props) => {
                         view={view}
                         handleEdit={handleEdit}
                         handleEditCancel={handleCancel}
-                        handleSave={handleSave}
+                        handleSave={handleSubmit(handleSave)}
                         handleDelete={handleDelete}
                     />
                 </div>
 
                 <div className="item-specification">
                     <div className="item-data">
+
                         <div className="first-section">
 
-                            {/* el manejo del padding se podria automatizar pero no tengo tiempo */}
                             <CustomFieldBasic
                                 title={'Serial'}
-                                value={item.serial}
                                 disabled={view !== 'edit'}
                                 paddingTitle="65px"
-                                register={register('serial')}
+                                error={errors.serial?.message}
+                                register={register('serial', {
+                                    pattern: {
+                                        value: patternString,
+                                        message: "Solo se aceptan Alphanumericos"
+                                    }
+                                })}
                             />
                             <CustomFieldBasic
                                 title={'Tipo Conexion'}
-                                value={item.connection_type}
                                 disabled={view !== 'edit'}
-                                register={register('connection_type')}
+                                error={errors.connection_type?.message}
+                                register={register('connection_type', {
+                                    pattern: {
+                                        value: patternString,
+                                        message: "Solo se aceptan Alphanumericos"
+                                    }
+                                })}
                             />
                             <CustomFieldBasic
                                 title={'Sistema de Almacen'}
-                                value={item.storage_system}
                                 disabled={view !== 'edit'}
-                                register={register('storage_system')}
+                                error={errors.storage_system?.message}
+                                register={register('storage_system', {
+                                    pattern: {
+                                        value: patternString,
+                                        message: "Solo se aceptan Alphanumericos"
+                                    }
+                                })}
                             />
                             <CustomFieldBasic
                                 title={'Producto Agregado'}
-                                value={item.created_at}
                                 disabled={view !== 'edit'}
                                 register={register('created_at')}
                             />
@@ -85,28 +108,48 @@ export const InventoryGridItemView = ({ item, view, setView }: Props) => {
                         <div className="second-section">
                             <CustomFieldBasic
                                 title={'Dueno'}
-                                value={item.owner}
                                 disabled={view !== 'edit'}
                                 paddingTitle="65px"
-                                register={register('owner')}
+                                error={errors.owner?.message}
+                                register={register('owner', {
+                                    pattern: {
+                                        value: patternString,
+                                        message: "Solo se aceptan Alphanumericos"
+                                    }
+                                })}
                             />
                             <CustomFieldBasic
                                 title={'Lugar'}
-                                value={item.location}
                                 disabled={view !== 'edit'}
-                                register={register('location')}
+                                error={errors.location?.message}
+                                register={register('location', {
+                                    pattern: {
+                                        value: patternString,
+                                        message: "Solo se aceptan Alphanumericos"
+                                    }
+                                })}
                             />
                             <CustomFieldBasic
                                 title={'Fabricante'}
-                                value={item.manufacturer}
                                 disabled={view !== 'edit'}
-                                register={register('manufacturer')}
+                                error={errors.manufacturer?.message}
+                                register={register('manufacturer', {
+                                    pattern: {
+                                        value: patternString,
+                                        message: "Solo se aceptan Alphanumericos"
+                                    }
+                                })}
                             />
                             <CustomFieldBasic
                                 title={'Condicion'}
-                                value={item.condition}
                                 disabled={view !== 'edit'}
-                                register={register('condition')}
+                                error={errors.condition?.message}
+                                register={register('condition', {
+                                    pattern: {
+                                        value: patternString,
+                                        message: "Solo se aceptan Alphanumericos"
+                                    }
+                                })}
                             />
 
                         </div>
@@ -115,36 +158,56 @@ export const InventoryGridItemView = ({ item, view, setView }: Props) => {
                     <div className="item-financial-movements">
                         <CustomFieldBasic
                             title={'Comprado en'}
-                            value={item.purchase}
                             disabled={view !== 'edit'}
                             register={register('purchase')}
                         />
                         <CustomFieldBasic
                             title={'Ventas'}
-                            value={item.seals}
                             disabled={view !== 'edit'}
-                            register={register('seals')}
+                            error={errors.seals?.message}
+                            register={register('seals', {
+                                pattern: {
+                                    value: patternNumber,
+                                    message: "Solo se aceptan valores numericos"
+                                }
+                            })
+                            }
                         />
                     </div>
 
                     <div className="item-stock">
                         <CustomFieldBasic
                             title={'Inventario Max.'}
-                            value={item.i_max}
                             disabled={view !== 'edit'}
-                            register={register('i_max')}
+                            error={errors.i_max?.message}
+                            register={register('i_max', {
+                                pattern: {
+                                    value: patternNumber,
+                                    message: "Solo se aceptan valores numericos"
+                                }
+                            })}
                         />
                         <CustomFieldBasic
                             title={'Inventario B.'}
-                            value={item.i_b}
                             disabled={view !== 'edit'}
-                            register={register('i_b')}
+                            error={errors.i_b?.message}
+                            register={register('i_b', {
+                                pattern: {
+                                    value: patternNumber,
+                                    message: "Solo se aceptan valores numericos"
+                                }
+                            })}
                         />
                         <CustomFieldBasic
                             title={'Inventario N.'}
-                            value={item.i_n}
                             disabled={view !== 'edit'}
-                            register={register('i_n')}
+                            error={errors.i_n?.message}
+                            register={register('i_n', {
+                                pattern: {
+                                    value: patternNumber,
+                                    message: "Solo se aceptan valores numericos"
+                                }
+                            })}
                         />
                     </div>
                 </div>

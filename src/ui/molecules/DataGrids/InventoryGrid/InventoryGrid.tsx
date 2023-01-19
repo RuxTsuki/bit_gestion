@@ -1,98 +1,118 @@
-import { AddOutlined } from '@mui/icons-material';
-import { DataGrid, GridColDef, GridEventListener, GridRenderCellParams, GridRowId, GridRowModel, GridRowModes, GridRowModesModel, GridRowParams, GridRowsProp, GridToolbarContainer, GridValueGetterParams, MuiEvent } from '@mui/x-data-grid';
-import { Button } from '@mui/material';
-import { SyntheticEvent, useLayoutEffect, useRef, useState } from 'react';
-import { TouchRippleActions } from '@mui/material/ButtonBase/TouchRipple';
+import { useEffect, useState } from 'react';
+import { SearchOutlined, EditOutlined, DeleteOutline } from '@mui/icons-material';
+import { DataGrid, GridColDef, GridRowParams } from '@mui/x-data-grid';
+import { IconButton } from '@mui/material';
+import { ModalDataGridItem } from '@/ui/molecules/ModalDataGridItem';
+import { MeterItemResponse } from '@/models';
+import './inventory_grid.css';
 
-export type GridRowsTest = {
-    id: number, lastName: string, firstName: string, age: number, isNew: boolean
-}
 
-const initialRows = [
-    { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35, isNew: false },
-    { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42, isNew: false },
-    { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45, isNew: false },
-    { id: 4, lastName: 'Stark', firstName: 'Arya', age: 16, isNew: false },
-    { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null, isNew: false },
-    { id: 6, lastName: 'Melisandre', firstName: null, age: 150, isNew: false },
-    { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44, isNew: false },
-    { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36, isNew: false },
-    { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65, isNew: false },
-];
+export const InventoryGridActions = ({ row }: Partial<GridRowParams>) => {
 
-const RenderDate = (props: GridRenderCellParams<Date>) => {
-    const { hasFocus, value, row } = props;
-    const buttonElement = useRef<HTMLButtonElement | null>(null);
-    const rippleRef = useRef<TouchRippleActions | null>(null);
-
-    useLayoutEffect(() => {
-        if (hasFocus) {
-            const input = buttonElement.current?.querySelector('input');
-            input?.focus();
-        } else if (rippleRef.current) {
-            // Only available in @mui/material v5.4.1 or later
-            rippleRef.current.stop({} as any);
-        }
-    }, [hasFocus]);
-
-    const onClickBtn = () => {
-        console.log(row, value);
+    const showRow = () => {
+        console.log(row);
     }
 
     return (
-        <>
-            <Button
-                component="button"
-                ref={buttonElement}
-                touchRippleRef={rippleRef}
-                variant="contained"
-                size="small"
-                style={{ marginLeft: 16 }}
-                // Remove button from tab sequence when cell does not have focus
-                tabIndex={hasFocus ? 0 : -1}
-                onKeyDown={(event: React.KeyboardEvent) => {
-                    if (event.key === ' ') {
-                        // Prevent key navigation when focus is on button
-                        event.stopPropagation();
-                    }
-                }}
-                onClick={onClickBtn}
-            >
-                Open
-            </Button>
-        </>
-    );
-};
+        <div className="action-btns-grid">
+            <IconButton onClick={showRow}>
+                <SearchOutlined />
+            </IconButton>
 
-export const InventoryGrid = () => {
-    const [rows, setRows] = useState(initialRows);
-    const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
+            <IconButton>
+                <EditOutlined />
+            </IconButton>
+
+            <IconButton>
+                <DeleteOutline />
+            </IconButton>
+
+            <ModalDataGridItem action='view' actionFunc={() => { }} item={row} />
+        </div>
+    );
+}
+
+export const InventoryGrid = ({ data = [] }: { data: MeterItemResponse[] }) => {
+    const [rows, setRows] = useState<MeterItemResponse[]>([]);
+
+    useEffect(() => {
+        setRows(data || []);
+    }, [data])
+
 
     const columns: GridColDef[] = [
-        { field: 'id', headerName: 'ID', width: 70 },
-        { field: 'firstName', headerName: 'First name', width: 130 },
-        { field: 'lastName', headerName: 'Last name', width: 130 },
         {
-            field: 'age',
-            headerName: 'Age',
-            type: 'number',
-            width: 90,
+            field: 'id',
+            headerName: 'ID',
+            width: 70
         },
         {
-            field: 'fullName',
-            headerName: 'Full name',
-            description: 'This column has a value getter and is not sortable.',
-            sortable: false,
-            width: 160,
-            valueGetter: (params: GridValueGetterParams) =>
-                `${params.row.firstName || ''} ${params.row.lastName || ''}`,
+            field: 'serial',
+            headerName: 'Serial', width: 130,
+            type: 'number'
+        },
+        {
+            field: 'connection_type',
+            headerName: 'Tipo de Conexion',
+            width: 130
+        },
+        {
+            field: 'storage_system',
+            headerName: 'Sistema de Almacenamiento',
+            width: 190,
+        },
+        {
+            field: 'condition',
+            headerName: 'Condicion',
+            width: 100,
+        },
+        {
+            field: 'owner',
+            headerName: 'Dueno',
+            width: 100,
+        },
+        {
+            field: 'location',
+            headerName: 'Lugar',
+            width: 100,
+        },
+        {
+            field: 'manufacturer',
+            headerName: 'Fabricante',
+            width: 110,
+        },
+        {
+            field: 'purchase',
+            headerName: 'Compra',
+            width: 110,
+        },
+        {
+            field: 'seals',
+            headerName: 'seals',
+            width: 100,
+        },
+        {
+            field: 'i_max',
+            headerName: 'Inventario Max.',
+            width: 100,
+            type: 'number'
+        },
+        {
+            field: 'i_b',
+            headerName: 'Inventario B.',
+            width: 100,
+            type: 'number'
+        },
+        {
+            field: 'i_n',
+            headerName: 'Inventario N.',
+            width: 100,
+            type: 'number'
         }, {
-            field: 'actions',
-            type: 'actions',
-            headerName: 'Actions',
+            field: "none",
+            headerName: "Actions",
             width: 180,
-            cellClassName: 'actions',
-            renderCell: RenderDate
+            renderCell: InventoryGridActions
         }
     ];
 
@@ -103,22 +123,8 @@ export const InventoryGrid = () => {
                 columns={columns}
                 pageSize={5}
                 rowsPerPageOptions={[5]}
+                disableSelectionOnClick
             />
         </>
     )
-}
-
-const AddItemToolbar = () => {
-
-    const handleClick = () => {
-
-    };
-
-    return (
-        <GridToolbarContainer>
-            <Button color="primary" startIcon={<AddOutlined />} onClick={handleClick}>
-                Agregar Producto
-            </Button>
-        </GridToolbarContainer>
-    );
 }

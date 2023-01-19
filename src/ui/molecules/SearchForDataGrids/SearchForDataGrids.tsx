@@ -1,14 +1,39 @@
 
 import { Autocomplete, OutlinedInput, TextField, FormControl, InputAdornment, IconButton, Box } from '@mui/material';
 import { SearchOutlined } from '@mui/icons-material';
-import { FormEvent } from 'react';
+import { ChangeEvent, FormEvent, useCallback, useEffect, useState } from 'react';
+import { MeterItemResponse } from '@/models';
+import { useDebounce } from '@/customHooks/useDebounce';
+
+import { filterListByInclude } from '@/utils/filterListByInclude';
 import './search_for_data_grids.css';
 
-export const SearchForDataGrids = ({ gridData, autoCompleteOpts }: { gridData: [], autoCompleteOpts: string[] }) => {
+type Props = {
+    gridData: MeterItemResponse[],
+    valueToFilter: string,
+    onSearch: (dataFiltered: MeterItemResponse[]) => void
+}
 
-    const onSubmitSearch = (ev: FormEvent) => {
+export const SearchForDataGrids = ({ gridData, valueToFilter, onSearch }: Props) => {
+    const [searchWord, setSearchWord] = useState('');
+    const debouncedValue = useDebounce({ value: searchWord, delay: 430 });
+
+    useEffect(() => {
+        const lengthOfQuery = debouncedValue.trim().length;
+
+        if (lengthOfQuery > 0) {
+            const listFiltered = filterListByInclude(gridData, valueToFilter, debouncedValue);
+            onSearch(listFiltered);
+        }
+
+        if (lengthOfQuery === 0)
+            onSearch(gridData);
+
+    }, [debouncedValue]);
+
+    const onChangeSearchValue = (ev: ChangeEvent<HTMLInputElement>) => {
         ev.preventDefault(); // Prevent
-        console.log('vaa')
+        setSearchWord(ev.target.value);
     }
 
     return (
@@ -19,6 +44,7 @@ export const SearchForDataGrids = ({ gridData, autoCompleteOpts }: { gridData: [
                     size="small"
                     id="outlined-adornment-search"
                     type='text'
+                    onChange={onChangeSearchValue}
                     placeholder="Search item"
                     startAdornment={
                         <InputAdornment position="end">
@@ -34,14 +60,19 @@ export const SearchForDataGrids = ({ gridData, autoCompleteOpts }: { gridData: [
                 />
             </FormControl>
 
-            <Autocomplete
+            {/* <Autocomplete
                 size="small"
                 disablePortal
                 className='search-filter'
                 id="combo-box-filter"
-                options={autoCompleteOpts}
+                onChange={(_: any, newValue: string | null) => {
+                    if (newValue)
+                        setFilterSearch(newValue);
+                }}
+                inputValue={filterSearch}
+                options={autoCompleteOpts.map(({ title }) => title)}
                 renderInput={(params) => <TextField {...params} placeholder="Buscar por" />}
-            />
+            /> */}
         </div>
     )
 }

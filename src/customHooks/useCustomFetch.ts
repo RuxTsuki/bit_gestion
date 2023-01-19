@@ -15,7 +15,7 @@ const initialState: FetchState<any> = {
     error: null,
 }
 
-export const useCustomFetch = <T>(url: string, fetchOpts: RequestInit | undefined = {}) => {
+export const useCustomFetch = <T>(url: string = '', fetchOpts: RequestInit | undefined = {}) => {
     const [fetchState, setFetchState] = useState<FetchState<T>>(initialState);
 
     const refAbortController = useRef<AbortController>();
@@ -35,6 +35,7 @@ export const useCustomFetch = <T>(url: string, fetchOpts: RequestInit | undefine
 
                 if (!response.ok) {
                     setFetchState({ data: null, error: new Error(response.statusText), state: 'error' });
+                    showSnackbar('Something went wrong', 'error');
                     return;
                 }
 
@@ -46,7 +47,8 @@ export const useCustomFetch = <T>(url: string, fetchOpts: RequestInit | undefine
             }
         }
 
-        fetchData();
+        if (url.trim().length > 0)
+            fetchData();
 
         return () => { controller.abort(); };
     }, [url])
@@ -66,6 +68,7 @@ export const useCustomFetch = <T>(url: string, fetchOpts: RequestInit | undefine
 
             if (!response.ok) {
                 setFetchState({ data: null, error: new Error(response.statusText), state: 'error' });
+                showSnackbar('Something went wrong', 'error');
                 return fetchState;
             }
 
@@ -74,6 +77,7 @@ export const useCustomFetch = <T>(url: string, fetchOpts: RequestInit | undefine
 
         } catch (error) {
             setFetchState({ data: null, error: error as Error, state: 'error' });
+            showSnackbar('Something went wrong', 'error');
         }
 
         return fetchState;

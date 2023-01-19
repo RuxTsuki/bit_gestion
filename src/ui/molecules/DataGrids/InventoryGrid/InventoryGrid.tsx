@@ -36,7 +36,7 @@ const InventoryGridActions = memo(({ row }: Partial<GridRowParams>) => {
                 setView={setView}
                 open={open}
                 setOpen={setOpen}
-                actionFunc={() => { }} item={row} />
+                item={row} />
         </div>
     );
 })

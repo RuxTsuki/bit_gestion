@@ -24,14 +24,14 @@ type Props = {
     open: boolean,
     setOpen: (open: boolean) => void,
     setView: (view: 'edit' | 'delete' | 'view') => void;
-    actionFunc: () => void
 }
 
-export const ModalDataGridItem = ({ item, view, open = false, setView, setOpen, actionFunc }: Props) => {
+export const ModalDataGridItem = ({ item, view, open = false, setView, setOpen }: Props) => {
 
     const handleOpen = () => setOpen(true);
     const handleClose = (_: any, reason: string) => {
         if (reason !== 'backdropClick' && reason !== 'escapeKeyDown') {
+            setView('view');
             setOpen(false);
         }
     };
@@ -52,7 +52,7 @@ export const ModalDataGridItem = ({ item, view, open = false, setView, setOpen, 
                         <CloseOutlined />
                     </IconButton>
 
-                    <InventoryGridItemView item={item} view={view} setView={setView} />
+                    <InventoryGridItemView item={item} view={view} setView={setView} closeModal={handleClose} />
                 </Box>
             </Modal>
         </div>

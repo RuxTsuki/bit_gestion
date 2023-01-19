@@ -2,13 +2,16 @@ import { MeterItemForUpdate, MeterItemResponse, TypeOfView } from "@/models";
 import { CustomFieldBasic } from "@/ui/Atoms/Inputs";
 import { Controller, useForm } from "react-hook-form";
 import { ItemHeaderActions } from "./ItemHeaderActions";
-import { TextField } from '@mui/material';
+import { patchProduct } from '@/services';
 import './inventory_grid_item_view.css';
+import { useCustomFetch } from "@/customHooks";
+import { useShowGlobalSnackbar } from "@/contexts/snackbar";
 
 type Props = {
     item: MeterItemResponse;
     view: TypeOfView,
     setView: (view: TypeOfView) => void;
+    closeModal: (_: any, reason: string) => void;
 }
 
 const patternString = RegExp(/^\w+/g);
@@ -17,7 +20,10 @@ const patternNumber = RegExp(/^\d+$/);
 
 const patternDate = RegExp(/^(?:\d{4})-(?:\d{2})-(?:\d{2})T(?:\d{2}):(?:\d{2}):(?:\d{2}(?:\.\d*)?)(?:(?:-(?:\d{2}):(?:\d{2})|Z)?)$/)
 
-export const InventoryGridItemView = ({ item, view, setView }: Props) => {
+export const InventoryGridItemView = ({ item, view, setView, closeModal }: Props) => {
+
+    const [fetchEditState, makeFetchToEdit] = useCustomFetch();
+    const showSnackbar = useShowGlobalSnackbar();
 
     const { register, control, handleSubmit, getValues, reset, clearErrors, formState: { errors, isValid } } = useForm<MeterItemResponse>({
         defaultValues: { ...item }
@@ -27,7 +33,7 @@ export const InventoryGridItemView = ({ item, view, setView }: Props) => {
         setView('edit');
     }
 
-    const handleSave = () => {
+    const handleSave = async () => {
         console.log('values', getValues());
         console.log('Errors', errors, isValid);
 
@@ -41,10 +47,15 @@ export const InventoryGridItemView = ({ item, view, setView }: Props) => {
                 valuesToSave = { ...valuesToSave, [key]: value }
         }
 
-        console.log({
-            values: valuesToSave,
-            id
-        })
+        const { url, fetchOpts } = patchProduct(id, valuesToSave)
+        const response = await makeFetchToEdit(url, fetchOpts);
+
+        if (response.error) {
+            closeModal('', 'CloseByAction');
+            return;
+        }
+
+        console.log(response);
     }
 
     const handleDelete = () => {
@@ -52,6 +63,10 @@ export const InventoryGridItemView = ({ item, view, setView }: Props) => {
     }
 
     const handleCancel = () => {
+        onReset();
+    }
+
+    const onReset = () => {
         reset({ ...item });
         clearErrors();
         setView('view');

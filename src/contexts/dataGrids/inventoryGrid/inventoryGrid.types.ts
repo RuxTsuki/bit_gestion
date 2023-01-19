@@ -1,23 +1,5 @@
 import { MeterCollectionResponse, MeterItemForUpdate, MeterItemResponse } from '@/models';
 
-interface MeterItemResponseOptional {
-    serial?: number,
-    connection_type?: string,
-    storage_system?: string,
-    condition?: string,
-    owner?: string,
-    location?: string,
-    manufacturer?: string,
-    purchase?: string,
-    i_max?: number,
-    i_b?: number,
-    i_n?: number,
-    seals?: number,
-    id?: number,
-    created_at?: string,
-    updated_at?: string
-}
-
 // toco any por que no entiendo bien aun la causa del error
 export interface InventoryGridState {
     data: MeterCollectionResponse | any;

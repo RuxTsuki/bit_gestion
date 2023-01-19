@@ -34,9 +34,7 @@ export interface MeterItemResponse {
     i_b: number,
     i_n: number,
     seals: number,
-    id: number,
-    created_at: string,
-    updated_at: string
+    id: number
 }
 
 export interface MeterCollectionResponse {

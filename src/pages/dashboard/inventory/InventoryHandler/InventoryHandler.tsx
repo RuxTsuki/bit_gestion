@@ -33,9 +33,9 @@ export const InventoryHandler = () => {
     }
 
     useEffect(() => {
-      setDataToShow(items);
+        setDataToShow(items);
     }, [items])
-    
+
 
     return (
         <>

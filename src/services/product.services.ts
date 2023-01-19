@@ -16,7 +16,10 @@ export const patchProduct = (id: number, productData: MeterItemForUpdate): {
         url: `${baseUrl}/${apiMeter}/${id}`,
         fetchOpts: {
             method: 'PATCH',
-            body
+            body,
+            headers: {
+                'Content-Type': 'application/json'
+            }
         }
     };
 }
@@ -29,7 +32,10 @@ export const deleteProduct = (id: number): {
     return {
         url: `${baseUrl}/${apiMeter}/${id}`,
         fetchOpts: {
-            method: 'DELETE'
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
         }
     }
 }

@@ -17,7 +17,7 @@ export const CustomSelect = ({ list, value, label, onChange, onBlur, disabled = 
     return (
         <>
             <FormControl>
-                <InputLabel id={`custom-select-${idForLabels}`}>{label}</InputLabel>
+                <InputLabel shrink={true} id={`custom-select-${idForLabels}`}>{label}</InputLabel>
                 <Select
                     labelId={`custom-select-${idForLabels}`}
                     label={label}

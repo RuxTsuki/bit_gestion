@@ -115,82 +115,58 @@ export const InventoryGridItemView = ({ item, view, setView, closeModal }: Props
                                     }
                                 })}
                             />
-                            <CustomFieldBasic
-                                title={'Tipo Conexion'}
-                                disabled={view !== 'edit'}
-                                error={errors.connection_type?.message}
-                                register={register('connection_type', {
-                                    pattern: {
-                                        value: patternString,
-                                        message: "Solo se aceptan Alphanumericos"
-                                    }
-                                })}
-                            />
 
                             <Controller
                                 control={control}
                                 name='connection_type'
-                                render={({
-                                    field: { onChange, onBlur, value, name, ref },
-                                    fieldState: { invalid, isTouched, isDirty, error }
-                                }) => {
-                                    return (
-                                        <CustomSelect
-                                            label="Tipo De Conexion"
-                                            disabled={view !== 'edit'}
-                                            value={value}
-                                            onChange={onChange}
-                                            onBlur={onBlur}
-                                            list={listTypeConnection}
-                                        />
-                                    )
-                                }
+                                render={({ field: { onChange, onBlur, value } }) => (
+                                    <CustomSelect
+                                        label="Tipo De Conexion"
+                                        disabled={view !== 'edit'}
+                                        value={value}
+                                        onChange={onChange}
+                                        onBlur={onBlur}
+                                        list={listTypeConnection}
+                                    />
+                                )
                                 }
                             />
 
-                            <CustomFieldBasic
-                                title={'Sistema de Almacen'}
-                                disabled={view !== 'edit'}
-                                error={errors.storage_system?.message}
-                                register={register('storage_system', {
-                                    pattern: {
-                                        value: patternString,
-                                        message: "Solo se aceptan Alphanumericos"
-                                    }
-                                })}
-                            />
-                            {/* <Controller
+                            <Controller
                                 control={control}
-                                name='created_at'
-                                render={({
-                                    field: { onChange, onBlur, value, name, ref },
-                                    fieldState: { invalid, isTouched, isDirty, error }
-                                }) => {
-                                    return (
-                                        < input type="datetime-local"
-                                            value={value}
-                                            onBlur={onBlur}
-                                            onChange={onChange}
-                                        />
-                                    )
+                                name='storage_system'
+                                render={({ field: { onChange, onBlur, value } }) => (
+                                    <CustomSelect
+                                        label="Sistema de Almacen"
+                                        disabled={view !== 'edit'}
+                                        value={value}
+                                        onChange={onChange}
+                                        onBlur={onBlur}
+                                        list={listStorageSystemOption}
+                                    />
+                                )
                                 }
-                                }
-                            /> */}
+                            />
                         </div>
 
                         <div className="second-section">
-                            <CustomFieldBasic
-                                title={'Dueno'}
-                                disabled={view !== 'edit'}
-                                paddingTitle="65px"
-                                error={errors.owner?.message}
-                                register={register('owner', {
-                                    pattern: {
-                                        value: patternString,
-                                        message: "Solo se aceptan Alphanumericos"
-                                    }
-                                })}
+
+                            <Controller
+                                control={control}
+                                name='owner'
+                                render={({ field: { onChange, onBlur, value } }) => (
+                                    <CustomSelect
+                                        label="Dueno"
+                                        disabled={view !== 'edit'}
+                                        value={value}
+                                        onChange={onChange}
+                                        onBlur={onBlur}
+                                        list={listOwnerOption}
+                                    />
+                                )
+                                }
                             />
+
                             <CustomFieldBasic
                                 title={'Lugar'}
                                 disabled={view !== 'edit'}
@@ -213,18 +189,22 @@ export const InventoryGridItemView = ({ item, view, setView, closeModal }: Props
                                     }
                                 })}
                             />
-                            <CustomFieldBasic
-                                title={'Condicion'}
-                                disabled={view !== 'edit'}
-                                error={errors.condition?.message}
-                                register={register('condition', {
-                                    pattern: {
-                                        value: patternString,
-                                        message: "Solo se aceptan Alphanumericos"
-                                    }
-                                })}
-                            />
 
+                            <Controller
+                                control={control}
+                                name='condition'
+                                render={({ field: { onChange, onBlur, value } }) => (
+                                    <CustomSelect
+                                        label="Condicion"
+                                        disabled={view !== 'edit'}
+                                        value={value}
+                                        onChange={onChange}
+                                        onBlur={onBlur}
+                                        list={listConditionOption}
+                                    />
+                                )
+                                }
+                            />
                         </div>
                     </div>
 

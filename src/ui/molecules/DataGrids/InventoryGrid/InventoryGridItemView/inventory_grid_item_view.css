@@ -1,0 +1,45 @@
+.inventory-item-contianer {
+    min-width: 250px;
+}
+
+.inventory-item-contianer .item-header {
+    display: flex;
+    justify-content: space-between;
+    padding-block: 8px;
+}
+
+.inventory-item-contianer .first-section,
+.inventory-item-contianer .second-section {
+    display: grid;
+    gap: 10px;
+}
+
+.inventory-item-contianer .item-financial-movements,
+.inventory-item-contianer .item-stock {
+    display: grid;
+    gap: 10px;
+}
+
+.inventory-item-contianer .item-specification {
+    overflow: auto;
+    padding-right: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.inventory-item-contianer .item-data {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+@media screen and (min-width: 992px) {
+    .inventory-item-contianer {
+        width: 630px;
+    }
+
+    .inventory-item-contianer .item-data {
+        flex-direction: row;
+    }
+}

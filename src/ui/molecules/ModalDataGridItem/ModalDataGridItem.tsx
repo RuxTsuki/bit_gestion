@@ -4,18 +4,20 @@ import Modal from '@mui/material/Modal';
 import { useState } from 'react';
 import { MeterItemResponse } from '@/models';
 import { InventoryGridItemView } from '../DataGrids';
+import { IconButton } from '@mui/material';
+import { CloseOutlined } from '@mui/icons-material';
+import './modal_data_grid_item.css';
 
 const style = {
     position: 'absolute' as 'absolute',
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 400,
+    width: 'auto',
     bgcolor: 'background.paper',
     boxShadow: 24,
     borderRadius: 6,
-    p: 8,
-
+    p: 6
 };
 
 type Props = {
@@ -29,7 +31,11 @@ type Props = {
 export const ModalDataGridItem = ({ item, action, open = false, setOpen, actionFunc }: Props) => {
 
     const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
+    const handleClose = (_: any, reason: string) => {
+        if (reason !== 'backdropClick' && reason !== 'escapeKeyDown') {
+            setOpen(false);
+        }
+    };
 
     return (
         <div>
@@ -38,9 +44,16 @@ export const ModalDataGridItem = ({ item, action, open = false, setOpen, actionF
                 onClose={handleClose}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
+                className="modal-data-grid-item"
             >
                 <Box sx={style}>
-                    <InventoryGridItemView item={item} />
+                    <IconButton
+                        onClick={() => handleClose('', 'closeByIcon')}
+                        className='close-icon'>
+                        <CloseOutlined />
+                    </IconButton>
+
+                    <InventoryGridItemView item={item} view={action} />
                 </Box>
             </Modal>
         </div>

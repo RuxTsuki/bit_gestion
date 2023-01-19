@@ -1,38 +1,41 @@
 import { FormControl, FormControlTypeMap, IconButton, InputAdornment, InputProps, OutlinedInput, OutlinedInputProps } from '@mui/material'
 import { OverridableComponent } from '@mui/material/OverridableComponent'
 import React, { ChangeEvent, ReactElement } from 'react'
+import { FieldValues, UseFormRegister, UseFormRegisterReturn } from 'react-hook-form';
+import './input_with_icon.css';
 
 type Props = {
-    onChange:
-    (value: ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | undefined) => void,
-    Icon?: ReactElement,
+    title: string,
     value?: string | number,
+    onChange?:
+    (value: ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | undefined) => void,
     disabled?: boolean,
-    type?: 'text' | 'number'
+    type?: 'text' | 'number',
+    paddingTitle?: string;
+    register?: UseFormRegisterReturn;
 }
 
-export const InputWithIcon = ({ Icon, onChange, value, type = 'text', disabled = false }: Props) => {
+export const InputWithIcon = ({ title, onChange, value, register, paddingTitle = '10px', type = 'text', disabled = false }: Props) => {
 
     return (
         <>
-            <FormControl variant="outlined">
+            <FormControl fullWidth variant="outlined">
                 <OutlinedInput
                     size="small"
                     type={type}
                     onChange={onChange}
                     value={value}
                     disabled={disabled}
+                    {...register}
                     startAdornment={
-                        Icon
-                            ? <InputAdornment position="end">
-                                <IconButton
-                                    edge="start"
-                                >
-                                    {Icon}
-                                </IconButton>
+                        <InputAdornment
+                            className='input-Adornment-title'
+                            style={{ paddingRight: paddingTitle }}
+                            position="end">
 
-                            </InputAdornment>
-                            : null
+                            {title}
+
+                        </InputAdornment>
                     }
                 />
             </FormControl>

@@ -1,0 +1,8 @@
+.modal-data-grid-item .close-icon {
+    position: absolute;
+    display: block;
+    right: 8px;
+    top: 8px;
+    height: 40px;
+    width: 40px;
+}

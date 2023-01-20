@@ -4,13 +4,35 @@ import ImgResetPassword from '@/assets/images/reset-password.png'
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { useForm } from "react-hook-form";
+import { useAuthDispatch } from '@/contexts/auth/hooks/useAuthContext';
+import { AuthActions } from '@/contexts/auth/auth.types';
 import './login.css';
+import { UserLocalStorage } from '@/utils/defaults';
+import { PASSWORD_DEFAULT, USERNAME_DEFAULT } from '@/utils/userCredentials';
 
 
 export const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
-    const { register, handleSubmit, watch, formState: { errors } } = useForm();
-    const onSubmit = (data: any) => console.log(data);
+    const [msgLoginError, setMsgLoginError] = useState('');
+    const dispatch = useAuthDispatch();
+    const { register, handleSubmit, getValues, formState: { errors } } = useForm({
+        defaultValues: {
+            username: '',
+            password: ''
+        }
+    });
+
+    const onSubmit = () => {
+        const { username, password } = getValues();
+        if (username === USERNAME_DEFAULT && password === PASSWORD_DEFAULT) {
+            localStorage.setItem(UserLocalStorage, JSON.stringify({ username, password }))
+            dispatch({ type: AuthActions.loginSuccess, payload: { username, password } });
+            setMsgLoginError('');
+            return;
+        }
+
+        setMsgLoginError('Ops... Credenciales Incorrectas');
+    };
 
     const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -30,13 +52,17 @@ export const Login = () => {
 
                 <FormHelperText>Please enter your account.</FormHelperText>
 
+                <FormHelperText error>{msgLoginError}</FormHelperText>
+
                 <Box>
                     <TextField
-                        {...register('example', { required: true })}
                         id="outlined-username"
                         label="Username"
                         variant="outlined"
                         inputProps={{ style: inputStyle }}
+                        error={!!errors.username}
+                        helperText={errors.username?.message}
+                        {...register('username', { required: 'Username no valido' })}
                     />
 
                     <FormControl variant="outlined">
@@ -45,6 +71,8 @@ export const Login = () => {
                             label="Password"
                             id="outlined-adornment-password"
                             type={showPassword ? 'text' : 'password'}
+                            error={!!errors.password}
+                            {...register('password', { required: 'Contrasenia no valida' })}
                             endAdornment={
                                 <InputAdornment position="end">
                                     <IconButton
@@ -59,6 +87,7 @@ export const Login = () => {
                             }
                             inputProps={{ style: inputStyle }}
                         />
+                        <FormHelperText error={!!errors.password}>{errors.password?.message}</FormHelperText>
                     </FormControl>
 
                     <Button type="submit" variant='contained'>Login</Button>

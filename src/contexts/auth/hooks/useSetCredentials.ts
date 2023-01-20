@@ -1,13 +1,18 @@
 import { useEffect, Dispatch } from 'react';
 import { AuthActions, AuthActionsType, AuthUser } from '../auth.types';
 import { PASSWORD_DEFAULT, USERNAME_DEFAULT } from '@/utils/userCredentials';
+import { UserLocalStorage } from '@/utils/defaults';
+import { useAuthDispatch } from './useAuthContext';
 
-export const useSetCredentials = (authDispatch: Dispatch<AuthActionsType>) => {
+export const useSetCredentials = () => {
+    const authDispatch = useAuthDispatch();
 
     useEffect(() => {
         const getUserLogged = async () => {
-            const user = localStorage.getItem('user');
+            const user = localStorage.getItem(UserLocalStorage);
+            console.log(user);
             if (!user) return;
+
 
             let userObj: AuthUser | null = null;
             try {

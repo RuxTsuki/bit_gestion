@@ -6,11 +6,24 @@ export type ConditionOption = 'nuevo' | 'usado' | '';
 
 export type ConnectionTypeOption = 'directa' | 'semi-directa' | 'indirecta' | '';
 
+export const DefaultStorageSystem: StorageSystemOption = 'interno';
+export const DefaultConditionOption: ConditionOption = 'nuevo';
+export const DefaultOwnerOption: OwnerOption = 'RF';
+export const DefaultConnectionTypeOption: ConnectionTypeOption = 'directa';
+
+
+export const defaultMeterValues = {
+    condition: DefaultConditionOption,
+    owner: DefaultOwnerOption,
+    storage_system: DefaultStorageSystem,
+    connection_type: DefaultConnectionTypeOption
+}
+
 export interface MeterItemForUpdate {
-    connection_type?: ConnectionTypeOption,
-    storage_system?: StorageSystemOption,
-    condition?: ConditionOption,
-    owner?: OwnerOption,
+    connection_type: ConnectionTypeOption | '',
+    storage_system: StorageSystemOption | '',
+    condition: ConditionOption | '',
+    owner: OwnerOption | '',
     serial?: string,
     location?: string,
     purchase?: string,
@@ -26,7 +39,7 @@ export interface MeterItemResponse {
     storage_system: StorageSystemOption,
     condition: ConditionOption,
     owner: OwnerOption,
-    serial: number,
+    serial: string,
     location: string,
     manufacturer: string,
     purchase: string,
@@ -57,4 +70,4 @@ export interface MeterErrorResponse {
     detail: MeterErrorDetail[];
 }
 
-export type TypeOfView = 'edit' | 'delete' | 'view';
+export type TypeOfView = 'edit' | 'delete' | 'view' | 'create';

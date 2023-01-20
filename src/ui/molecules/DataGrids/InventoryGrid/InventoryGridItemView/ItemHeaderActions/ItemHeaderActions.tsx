@@ -10,9 +10,34 @@ type Props = {
     handleEditCancel: () => void,
     handleSave: () => void,
     handleDelete: () => void,
+    handleCreate: () => void,
+    handleCreateCancel: () => void
 }
 
-export const ItemHeaderActions = ({ view, handleEdit, handleEditCancel, handleSave, handleDelete }: Props) => {
+export const ItemHeaderActions = ({
+    view,
+    handleEdit,
+    handleEditCancel,
+    handleSave,
+    handleDelete,
+    handleCreate,
+    handleCreateCancel
+}: Props) => {
+
+    if (view === 'create') {
+        return (
+            <>
+                <Button onClick={handleCreate} size="small" variant="outlined">
+                    Create
+                </Button>
+
+                <Button onClick={handleCreateCancel} variant="outlined" color="error" size="small">
+                    Cancel
+                </Button>
+            </>
+        )
+    }
+
     return (
         <div>
             {

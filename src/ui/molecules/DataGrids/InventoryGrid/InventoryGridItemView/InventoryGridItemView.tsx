@@ -1,43 +1,39 @@
-import { ConditionOption, ConnectionTypeOption, MeterItemForUpdate, MeterItemResponse, OwnerOption, StorageSystemOption, TypeOfView } from "@/models";
+import { listTypeConnection, patternString, listStorageSystemOption, listConditionOption, listOwnerOption, patternDate, patternNumber } from "@/utils/defaults";
+import { MeterItemForUpdate, MeterItemResponse, TypeOfView, defaultMeterValues } from "@/models";
 import { CustomFieldBasic } from "@/ui/Atoms/Inputs";
 import { Controller, useForm } from "react-hook-form";
 import { ItemHeaderActions } from "./ItemHeaderActions";
-import { deleteProduct, patchProduct } from '@/services';
+import { createProduct, patchProduct } from '@/services';
 import { useCustomFetch } from "@/customHooks";
 import { useShowGlobalSnackbar } from "@/contexts/snackbar";
 import { InventoryGridStateActions, useInventoryGridDispatch } from "@/contexts/dataGrids/inventoryGrid";
 import { CustomSelect } from "@/ui/Atoms/CustomSelect";
 import { ModalConfirmation } from "@/ui/Atoms/ModalConfirmation";
 import { useState } from "react";
-import './inventory_grid_item_view.css';
 import { useDeleteInventoryItem } from "@/customHooks/useDeleteInventoryItem";
 
+import './inventory_grid_item_view.css';
+
 type Props = {
-    item: MeterItemResponse;
+    item?: MeterItemResponse | MeterItemForUpdate;
     view: TypeOfView,
     setView: (view: TypeOfView) => void;
     closeModal: (_: any, reason: string) => void;
 }
 
-const patternString = RegExp(/^\w+/g);
-
-const patternNumber = RegExp(/^[1-9]\d*(\.\d+)?$/);
-
-const listTypeConnection: ConnectionTypeOption[] = ['directa', 'semi-directa', 'indirecta', ''];
-const listConditionOption: ConditionOption[] = ['nuevo', 'usado', ''];
-const listOwnerOption: OwnerOption[] = ['OR', 'RF', ''];
-const listStorageSystemOption: StorageSystemOption[] = ['externo', 'interno', ''];
-
-const patternDate = RegExp(/^(?:\d{4})-(?:\d{2})-(?:\d{2})T(?:\d{2}):(?:\d{2}):(?:\d{2}(?:\.\d*)?)(?:(?:-(?:\d{2}):(?:\d{2})|Z)?)$/)
-
-export const InventoryGridItemView = ({ item, view, setView, closeModal }: Props) => {
+export const InventoryGridItemView = ({ item = {
+    condition: '',
+    connection_type: '',
+    storage_system: '',
+    owner: ''
+}, view, setView, closeModal }: Props) => {
     const [openConfirm, setOpenConfirm] = useState(false);
     const [_, makeFetch] = useCustomFetch();
     const showSnackbar = useShowGlobalSnackbar();
     const dispatch = useInventoryGridDispatch();
-    const onDeleteItem = useDeleteInventoryItem()
+    const onDeleteItem = useDeleteInventoryItem();
 
-    const { register, control, handleSubmit, getValues, reset, clearErrors, formState: { errors, isValid } } = useForm<MeterItemResponse>({
+    const { register, control, handleSubmit, getValues, reset, clearErrors, formState, formState: { errors, isValid } } = useForm<MeterItemResponse>({
         defaultValues: { ...item }
     });
 
@@ -50,7 +46,9 @@ export const InventoryGridItemView = ({ item, view, setView, closeModal }: Props
         if (!isValid) return;
 
         const { id, ...values } = { ...getValues() };
-        let valuesToSave: MeterItemForUpdate = {};
+        let valuesToSave: MeterItemForUpdate = {
+            ...defaultMeterValues
+        };
 
         for (const [key, value] of Object.entries(values)) {
             if (value !== '')
@@ -75,22 +73,60 @@ export const InventoryGridItemView = ({ item, view, setView, closeModal }: Props
         setOpenConfirm(true);
     }
 
+    const handleCreate = async () => {
+        if (!isValid) return;
+
+        const { id, ...values } = { ...getValues() };
+        let valuesToSave: MeterItemForUpdate = {
+            ...defaultMeterValues
+        };
+
+        for (const [key, value] of Object.entries(values)) {
+            if (value !== '')
+                valuesToSave = { ...valuesToSave, [key]: value }
+        }
+
+        const { url, fetchOpts } = createProduct(valuesToSave);
+        const response = await makeFetch(url, fetchOpts);
+
+        if (!response.error) {
+            showSnackbar('Registro Creado', 'success');
+            const dataResponse = response.data as any;
+            dispatch({
+                type: InventoryGridStateActions.newDataItem,
+                payload: { id: dataResponse.id, dataItem: valuesToSave }
+            })
+        }
+
+        closeModal('', 'CloseByAction');
+    }
+
+    const handleCreateCancel = () => {
+        onReset();
+        closeModal('', 'CloseByAction');
+    }
+
     const onDelete = async (wantContinue: boolean) => {
         if (!wantContinue) return;
 
-        await onDeleteItem(item.id);
+        const itemId = (item as MeterItemResponse).id
+        if (!itemId) return;
+
+        await onDeleteItem(itemId);
         closeModal('', 'CloseByAction');
     }
 
     const handleCancel = () => {
         onReset();
+        setView('view');
     }
 
     const onReset = () => {
         reset({ ...item });
         clearErrors();
-        setView('view');
     }
+
+    const disabledCondition = view === 'view';
 
     return (
         <div className="inventory-item-contianer">
@@ -106,6 +142,8 @@ export const InventoryGridItemView = ({ item, view, setView, closeModal }: Props
                         handleEditCancel={handleCancel}
                         handleSave={handleSubmit(handleSave)}
                         handleDelete={handleDelete}
+                        handleCreate={handleSubmit(handleCreate)}
+                        handleCreateCancel={handleCreateCancel}
                     />
                 </div>
 
@@ -116,7 +154,7 @@ export const InventoryGridItemView = ({ item, view, setView, closeModal }: Props
 
                             <CustomFieldBasic
                                 title={'Serial'}
-                                disabled={view !== 'edit'}
+                                disabled={disabledCondition}
                                 paddingTitle="65px"
                                 error={errors.serial?.message}
                                 register={register('serial', {
@@ -130,10 +168,14 @@ export const InventoryGridItemView = ({ item, view, setView, closeModal }: Props
                             <Controller
                                 control={control}
                                 name='connection_type'
-                                render={({ field: { onChange, onBlur, value } }) => (
+                                rules={{ required: 'Por favor seleccione una opcion' }}
+                                render={({
+                                    field: { onChange, onBlur, value },
+                                    fieldState: { error } }) => (
                                     <CustomSelect
                                         label="Tipo De Conexion"
-                                        disabled={view !== 'edit'}
+                                        error={error?.message}
+                                        disabled={disabledCondition}
                                         value={value}
                                         onChange={onChange}
                                         onBlur={onBlur}
@@ -146,10 +188,14 @@ export const InventoryGridItemView = ({ item, view, setView, closeModal }: Props
                             <Controller
                                 control={control}
                                 name='storage_system'
-                                render={({ field: { onChange, onBlur, value } }) => (
+                                rules={{ required: 'Por favor seleccione una opcion' }}
+                                render={({
+                                    field: { onChange, onBlur, value },
+                                    fieldState: { error } }) => (
                                     <CustomSelect
                                         label="Sistema de Almacen"
-                                        disabled={view !== 'edit'}
+                                        error={error?.message}
+                                        disabled={disabledCondition}
                                         value={value}
                                         onChange={onChange}
                                         onBlur={onBlur}
@@ -165,10 +211,15 @@ export const InventoryGridItemView = ({ item, view, setView, closeModal }: Props
                             <Controller
                                 control={control}
                                 name='owner'
-                                render={({ field: { onChange, onBlur, value } }) => (
+                                rules={{ required: 'Por favor seleccione una opcion' }}
+                                render={({
+                                    field: { onChange, onBlur, value },
+                                    fieldState: { error }
+                                }) => (
                                     <CustomSelect
                                         label="Dueno"
-                                        disabled={view !== 'edit'}
+                                        error={error?.message}
+                                        disabled={disabledCondition}
                                         value={value}
                                         onChange={onChange}
                                         onBlur={onBlur}
@@ -180,7 +231,7 @@ export const InventoryGridItemView = ({ item, view, setView, closeModal }: Props
 
                             <CustomFieldBasic
                                 title={'Lugar'}
-                                disabled={view !== 'edit'}
+                                disabled={disabledCondition}
                                 error={errors.location?.message}
                                 register={register('location', {
                                     pattern: {
@@ -191,7 +242,7 @@ export const InventoryGridItemView = ({ item, view, setView, closeModal }: Props
                             />
                             <CustomFieldBasic
                                 title={'Fabricante'}
-                                disabled={view !== 'edit'}
+                                disabled={disabledCondition}
                                 error={errors.manufacturer?.message}
                                 register={register('manufacturer', {
                                     pattern: {
@@ -204,10 +255,14 @@ export const InventoryGridItemView = ({ item, view, setView, closeModal }: Props
                             <Controller
                                 control={control}
                                 name='condition'
-                                render={({ field: { onChange, onBlur, value } }) => (
+                                rules={{ required: 'Por favor seleccione una opcion' }}
+                                render={({
+                                    field: { onChange, onBlur, value },
+                                    fieldState: { error } }) => (
                                     <CustomSelect
                                         label="Condicion"
-                                        disabled={view !== 'edit'}
+                                        error={error?.message}
+                                        disabled={disabledCondition}
                                         value={value}
                                         onChange={onChange}
                                         onBlur={onBlur}
@@ -224,7 +279,7 @@ export const InventoryGridItemView = ({ item, view, setView, closeModal }: Props
 
                         {/* <CustomFieldBasic
                             title={'Comprado en'}
-                            disabled={view !== 'edit'}
+                            disabled={disabledCondition}
                             register={register('purchase')}
                         /> */}
                         {/* <Controller
@@ -247,7 +302,7 @@ export const InventoryGridItemView = ({ item, view, setView, closeModal }: Props
 
                         <CustomFieldBasic
                             title={'Ventas'}
-                            disabled={view !== 'edit'}
+                            disabled={disabledCondition}
                             error={errors.seals?.message}
                             register={register('seals', {
                                 pattern: {
@@ -262,7 +317,7 @@ export const InventoryGridItemView = ({ item, view, setView, closeModal }: Props
                     <div className="item-stock">
                         <CustomFieldBasic
                             title={'Inventario Max.'}
-                            disabled={view !== 'edit'}
+                            disabled={disabledCondition}
                             error={errors.i_max?.message}
                             register={register('i_max', {
                                 pattern: {
@@ -273,7 +328,7 @@ export const InventoryGridItemView = ({ item, view, setView, closeModal }: Props
                         />
                         <CustomFieldBasic
                             title={'Inventario B.'}
-                            disabled={view !== 'edit'}
+                            disabled={disabledCondition}
                             error={errors.i_b?.message}
                             register={register('i_b', {
                                 pattern: {
@@ -284,7 +339,7 @@ export const InventoryGridItemView = ({ item, view, setView, closeModal }: Props
                         />
                         <CustomFieldBasic
                             title={'Inventario N.'}
-                            disabled={view !== 'edit'}
+                            disabled={disabledCondition}
                             error={errors.i_n?.message}
                             register={register('i_n', {
                                 pattern: {

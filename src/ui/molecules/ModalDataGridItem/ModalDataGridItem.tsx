@@ -1,6 +1,6 @@
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
-import { MeterItemResponse } from '@/models';
+import { MeterItemForUpdate, MeterItemResponse, TypeOfView } from '@/models';
 import { InventoryGridItemView } from '../DataGrids';
 import { IconButton } from '@mui/material';
 import { CloseOutlined } from '@mui/icons-material';
@@ -19,11 +19,11 @@ const style = {
 };
 
 type Props = {
-    item: MeterItemResponse,
-    view: 'view' | 'edit' | 'delete',
+    item?: MeterItemResponse | MeterItemForUpdate,
+    view: TypeOfView,
     open: boolean,
     setOpen: (open: boolean) => void,
-    setView: (view: 'edit' | 'delete' | 'view') => void;
+    setView: (view: TypeOfView) => void;
 }
 
 export const ModalDataGridItem = ({ item, view, open = false, setView, setOpen }: Props) => {

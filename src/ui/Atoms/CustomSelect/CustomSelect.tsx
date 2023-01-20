@@ -1,4 +1,4 @@
-import { FormControl, InputLabel, MenuItem, Select } from '@mui/material'
+import { FormControl, FormHelperText, InputLabel, MenuItem, Select } from '@mui/material'
 import { useId } from 'react';
 import { Noop, UseFormRegisterReturn } from 'react-hook-form';
 
@@ -9,9 +9,10 @@ type Props = {
     onChange: (...event: any[]) => void,
     onBlur: Noop,
     disabled?: boolean,
+    error?: string
 }
 
-export const CustomSelect = ({ list, value, label, onChange, onBlur, disabled = false }: Props) => {
+export const CustomSelect = ({ list, value, label, error, onChange, onBlur, disabled = false }: Props) => {
     const idForLabels = useId();
 
     return (
@@ -27,11 +28,13 @@ export const CustomSelect = ({ list, value, label, onChange, onBlur, disabled = 
                     onChange={onChange}
                     onBlur={onBlur}
                     size="small"
+                    error={!!error}
                 >
                     {
                         list.map((item) => <MenuItem key={item} value={item}>{item}</MenuItem>)
                     }
                 </Select>
+                <FormHelperText error>{error}</FormHelperText>
             </FormControl>
         </>
     )

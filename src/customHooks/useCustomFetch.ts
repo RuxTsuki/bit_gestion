@@ -53,12 +53,16 @@ export const useCustomFetch = <T>(url: string = '', fetchOpts: RequestInit | und
         return () => { controller.abort(); };
     }, [url])
 
-    // func to fetch data
+    // func to fetch data manually this doesn't save state
     const fetchData = useCallback(async (
         url: string,
         fetchOpts: RequestInit | undefined
     ): Promise<FetchState<T>> => {
         refAbortController.current = abortController();
+
+        let data: T | null = null;
+        let error: null | Error | MeterErrorResponse = null;
+
         try {
             setFetchState(oldState => ({ ...oldState, state: 'loading' }));
             const response = await fetch(url, {
@@ -67,20 +71,25 @@ export const useCustomFetch = <T>(url: string = '', fetchOpts: RequestInit | und
             });
 
             if (!response.ok) {
-                setFetchState({ data: null, error: new Error(response.statusText), state: 'error' });
                 showSnackbar('Something went wrong', 'error');
-                return fetchState;
+
+                return {
+                    state: 'error',
+                    data: null,
+                    error: new Error(response.statusText),
+                };
             }
-
-            const data = await response.json();
-            setFetchState({ data, error: null, state: 'success' });
-
-        } catch (error) {
-            setFetchState({ data: null, error: error as Error, state: 'error' });
+            data = await response.json();
+        } catch (errorA) {
+            error = errorA as Error;
             showSnackbar('Something went wrong', 'error');
         }
 
-        return fetchState;
+        return {
+            state: 'success',
+            data,
+            error
+        };;
     }, []);
 
     useEffect(() => {

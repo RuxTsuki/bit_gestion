@@ -11,6 +11,7 @@ export enum InventoryGridStateActions {
     setItemSelected = 'set_item_selected',
     deleteDataItem = 'delete_data_item',
     updateDataItem = 'update_data_item',
+    newDataItem = 'new_data_item',
 }
 
 export type InventoryGridStateActionType =
@@ -18,5 +19,6 @@ export type InventoryGridStateActionType =
     | { type: InventoryGridStateActions.setItemSelected, payload: MeterItemResponse | {} }
     | { type: InventoryGridStateActions.deleteDataItem, payload: number }
     | { type: InventoryGridStateActions.updateDataItem, payload: { id: number, dataItem: MeterItemForUpdate } }
+    | { type: InventoryGridStateActions.newDataItem, payload: { id: number, dataItem: MeterItemForUpdate } }
 
 

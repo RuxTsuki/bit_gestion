@@ -1,6 +1,10 @@
 import { apiMeter, baseUrl } from "@/api/config"
 import { MeterItemForUpdate } from "@/models";
 
+const headers = {
+    'Content-Type': 'application/json'
+}
+
 export const getProduct = (id: number) => {
     return `${baseUrl}/${apiMeter}/${id}`;
 }
@@ -17,9 +21,7 @@ export const patchProduct = (id: number, productData: MeterItemForUpdate): {
         fetchOpts: {
             method: 'PATCH',
             body,
-            headers: {
-                'Content-Type': 'application/json'
-            }
+            headers
         }
     };
 }
@@ -33,9 +35,20 @@ export const deleteProduct = (id: number): {
         url: `${baseUrl}/${apiMeter}/${id}`,
         fetchOpts: {
             method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json'
-            }
+            headers
         }
     }
+}
+
+export const createProduct = (productData: MeterItemForUpdate) => {
+    const body = JSON.stringify(productData);
+
+    return {
+        url: `${baseUrl}/${apiMeter}`,
+        fetchOpts: {
+            method: 'POST',
+            body,
+            headers
+        }
+    };
 }

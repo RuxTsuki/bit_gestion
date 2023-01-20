@@ -37,6 +37,20 @@ export const inventoryGridReducer = (
                     items: state.data.items.filter((item: MeterItemResponse) => item.id !== action.payload)
                 }
             }
+        case InventoryGridStateActions.newDataItem:
+            return {
+                ...state,
+                data: {
+                    ...state.data,
+                    items: [
+                        ...state.data.items,
+                        {
+                            ...action.payload.dataItem,
+                            id: action.payload.id,
+                        }
+                    ]
+                }
+            }
         case InventoryGridStateActions.updateDataItem:
             return {
                 ...state,

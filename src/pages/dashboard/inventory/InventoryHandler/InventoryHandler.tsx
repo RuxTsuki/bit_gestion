@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react';
 import { InventoryGridStateActions } from '@/contexts/dataGrids/inventoryGrid';
 
 import '../inventory.css';
+import { CreateInventoryItem } from '@/ui/molecules/CreateInventoryItem';
 
 export const InventoryHandler = () => {
     const { data: { items } } = useInventoryGridState();
@@ -34,17 +35,14 @@ export const InventoryHandler = () => {
 
     useEffect(() => {
         setDataToShow(items);
-    }, [items])
-
+    }, [items]);
 
     return (
         <>
             <header className='inventory-header'>
                 <h1>Inventory</h1>
 
-                <Button variant='contained' startIcon={<AddOutlined />}>
-                    Nuevo Producto
-                </Button>
+                <CreateInventoryItem />
             </header>
 
             <div className='custom-line'></div>
@@ -54,6 +52,7 @@ export const InventoryHandler = () => {
             <div style={{ height: 400, width: '100%' }}>
                 <InventoryGrid data={dataToShow} />
             </div>
+            
         </>
     )
 }

@@ -1,17 +1,17 @@
 import Snackbar from '@mui/material/Snackbar';
 import { GlobalSnackbarActions } from '../globalSnackbar.types';
 import { useGetGlobalSnackbar, useGetGlobalSnackbarDispatch } from '../hooks';
-// import { forwardRef } from 'react';
-// import MuiAlert, { AlertProps } from '@mui/material/Alert';
+import { forwardRef } from 'react';
+import MuiAlert, { AlertProps } from '@mui/material/Alert';
 
 // eslint-disable-next-line @typescript-eslint/space-before-function-paren
-/* const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
+const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
     props,
     ref
 ) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
- */
+
 export const GlobalSnackbar = () => {
     const { message, opened, type, action, autoHideDuration, position } = useGetGlobalSnackbar();
     const dispatch = useGetGlobalSnackbarDispatch();
@@ -35,15 +35,28 @@ export const GlobalSnackbar = () => {
 
     return (
         <div id="global-snackbar">
-
-            <Snackbar
-                open={opened}
-                autoHideDuration={autoHideDuration}
-                onClose={handleClose}
-                message={message}
-                action={action}
-                anchorOrigin={{ vertical, horizontal }}
-            />
+            {
+                action
+                    ? <Snackbar
+                        open={opened}
+                        autoHideDuration={autoHideDuration}
+                        onClose={handleClose}
+                        message={message}
+                        action={action}
+                        anchorOrigin={{ vertical, horizontal }}
+                    />
+                    : <Snackbar
+                        open={opened}
+                        autoHideDuration={autoHideDuration}
+                        onClose={handleClose}
+                        message={message}
+                        action={action}
+                        anchorOrigin={{ vertical, horizontal }}
+                    >
+                        <Alert onClose={handleClose} severity={type} sx={{ width: '100%' }}>
+                            {message}
+                        </Alert>
+                    </Snackbar>}
 
         </div>
     );

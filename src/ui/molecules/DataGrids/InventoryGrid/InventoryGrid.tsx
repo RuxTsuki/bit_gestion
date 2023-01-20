@@ -4,9 +4,9 @@ import { DataGrid, GridColDef, GridRowParams } from '@mui/x-data-grid';
 import { IconButton } from '@mui/material';
 import { ModalDataGridItem } from '@/ui/molecules/ModalDataGridItem';
 import { MeterItemResponse, TypeOfView } from '@/models';
-import './inventory_grid.css';
 import { ModalConfirmation } from '@/ui/Atoms/ModalConfirmation';
 import { useDeleteInventoryItem } from '@/customHooks/useDeleteInventoryItem';
+import './inventory_grid.css';
 
 
 // increible 2horas viendo por que se moria
@@ -28,7 +28,6 @@ const InventoryGridActions = memo(({ row }: Partial<GridRowParams>) => {
 
     const deleteItem = async () => {
         await onDeleteItem(row.id);
-        console.log('colocar snackbar success');
     }
 
     return (

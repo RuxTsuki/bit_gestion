@@ -26,7 +26,7 @@ export const ItemHeaderActions = ({
 
     if (view === 'create') {
         return (
-            <>
+            <div>
                 <Button onClick={handleCreate} size="small" variant="outlined">
                     Create
                 </Button>
@@ -34,7 +34,7 @@ export const ItemHeaderActions = ({
                 <Button onClick={handleCreateCancel} variant="outlined" color="error" size="small">
                     Cancel
                 </Button>
-            </>
+            </div>
         )
     }
 

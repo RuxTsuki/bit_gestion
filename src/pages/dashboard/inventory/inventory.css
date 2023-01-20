@@ -15,10 +15,23 @@
     max-width: 200px;
 }
 
+.inventory-aditional-actions {
+    display: flex;
+    flex-direction: column;
+}
+
+.inventory-aditional-actions button {
+    height: 40px;
+    width: 40px;
+}
+
 @media screen and (min-width: 768px) {
     .inventory-header {
         flex-direction: row;
     }
 
-
+    .inventory-aditional-actions {
+        flex-direction: row;
+        align-items: center;
+    }
 }

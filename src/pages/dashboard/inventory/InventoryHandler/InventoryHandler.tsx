@@ -3,20 +3,22 @@ import { MeterCollectionResponse, MeterItemResponse } from '@/models';
 import { getInventory } from '@/services';
 import { InventoryGrid } from '@/ui/molecules/DataGrids';
 import { SearchForDataGrids } from '@/ui/molecules/SearchForDataGrids';
-import { Button } from '@mui/material';
-import { AddOutlined } from '@mui/icons-material';
+import { Button, IconButton } from '@mui/material';
+import { AddOutlined, RefreshOutlined } from '@mui/icons-material';
 import { useInventoryGridDispatch, useInventoryGridState } from '@/contexts/dataGrids/inventoryGrid/hooks';
 import { useEffect, useState } from 'react';
 import { InventoryGridStateActions } from '@/contexts/dataGrids/inventoryGrid';
 
 import '../inventory.css';
 import { CreateInventoryItem } from '@/ui/molecules/CreateInventoryItem';
+import { useShowGlobalSnackbar } from '@/contexts/snackbar';
 
 export const InventoryHandler = () => {
     const { data: { items } } = useInventoryGridState();
     const dispatch = useInventoryGridDispatch();
-    const [fetchState] = useCustomFetch<MeterCollectionResponse>(getInventory());
-    const [dataToShow, setDataToShow] = useState<MeterItemResponse[]>([])
+    const [fetchState, makeRefetch] = useCustomFetch<MeterCollectionResponse>(getInventory());
+    const [dataToShow, setDataToShow] = useState<MeterItemResponse[]>([]);
+    const showSnackbar = useShowGlobalSnackbar();
 
     useEffect(() => {
         if (fetchState.error || !fetchState.data) return;
@@ -37,6 +39,13 @@ export const InventoryHandler = () => {
         setDataToShow(items);
     }, [items]);
 
+    const onRefresh = async () => {
+        const response = await makeRefetch(getInventory(), {});
+        if (!response.error) {
+            showSnackbar('Data Actualizada', 'info')
+        }
+    }
+
     return (
         <>
             <header className='inventory-header'>
@@ -49,7 +58,12 @@ export const InventoryHandler = () => {
 
             <div className='custom-line'></div>
 
-            <SearchForDataGrids onSearch={onSearch} gridData={items} valueToFilter='serial' />
+            <div className='inventory-aditional-actions'>
+                <IconButton onClick={onRefresh} title='recargar informacion'>
+                    <RefreshOutlined />
+                </IconButton>
+                <SearchForDataGrids onSearch={onSearch} gridData={items} valueToFilter='serial' />
+            </div>
 
             <div style={{ height: 400, width: '100%' }}>
                 <InventoryGrid data={dataToShow} />

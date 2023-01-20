@@ -1,19 +1,10 @@
 import { Sidebar } from '@/ui/molecules/Sidebar'
 import { Outlet, useNavigate } from 'react-router-dom';
 import './dashboard.css';
-import { useAuthState } from '@/contexts/auth/hooks/useAuthContext';
-import { AuthStateType } from '@/contexts/auth/auth.types';
-import { useEffect } from 'react';
+import { useRedirectIfNotAuth } from '@/customHooks/useNavigateIfAuth';
 
 export const Dashboard = () => {
-    const { state } = useAuthState();
-    const navigateTo = useNavigate();
-
-    useEffect(() => {
-        if (state === AuthStateType.notAuthenticated) {
-            navigateTo('/login');
-        }
-    }, []);
+    useRedirectIfNotAuth();
 
     return (
         <div className='dashboard-container'>

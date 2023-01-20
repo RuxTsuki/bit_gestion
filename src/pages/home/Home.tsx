@@ -1,7 +1,7 @@
 import { useSetCredentials } from '@/contexts/auth/hooks/useSetCredentials';
 import { Header } from '@/ui/Atoms/Header';
 import { HomeContent } from '@/ui/Atoms/HomeContent';
-import { } from 'react'
+import { useNavigateIfAuth } from '@/customHooks/useNavigateIfAuth';
 import './home.css';
 
 export const Home = () => {

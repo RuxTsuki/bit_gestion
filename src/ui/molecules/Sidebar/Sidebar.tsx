@@ -1,7 +1,9 @@
 import InventoryOutlinedIcon from '@mui/icons-material/InventoryOutlined';
 import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
+import { IconButton, ListItemIcon, ListItemText, MenuItem, MenuList } from '@mui/material';
 import { useState } from 'react';
 import { NavLink } from "react-router-dom";
+import './sidebar.css';
 
 export const Sidebar = () => {
 
@@ -19,31 +21,36 @@ export const Sidebar = () => {
                 `${open ? 'sidebar-open' : 'sidebar-shrink'}`
             }>
                 <div className='top-section'>
-                    <h1>Enerbite</h1>
-
-                    <div className="bars">
+                    <IconButton onClick={() => setOpen(oldValue => !oldValue)}>
                         <MenuOutlinedIcon />
-                    </div>
+                    </IconButton>
 
+                    {open ? <h1>Enerbite</h1> : null}
                 </div>
-                {
-                    menuItem.map(({ path, name, icon }) =>
-                        <NavLink
-                            to={path}
-                            key={name}
-                            className={({ isActive }) =>
-                                isActive ? 'active' : undefined + ' link'
-                            }
-                        >
-                            <div className='icon'>
-                                {icon}
-                            </div>
-                            <div className="link-text">
-                                {name}
-                            </div>
-                        </NavLink>
-                    )
-                }
+
+                <MenuList>
+                    {
+                        menuItem.map(({ path, name, icon }) =>
+
+                            <NavLink
+                                to={path}
+                                key={name}
+                                className={({ isActive }) =>
+                                    isActive ? 'active' : undefined + ' link'
+                                }
+                            >
+                                <MenuItem>
+                                    <ListItemIcon>
+                                        {icon}
+                                    </ListItemIcon>
+
+                                    {open ? <ListItemText>{name}</ListItemText> : null}
+
+                                </MenuItem>
+                            </NavLink>
+                        )
+                    }
+                </MenuList>
 
             </div>
             <main>

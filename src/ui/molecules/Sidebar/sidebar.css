@@ -1,5 +1,17 @@
 .sidebar-container {
     display: flex;
+    height: 100vh;
+    background-color: #706f6f33;
+}
+
+.sidebar-container .top-section {
+    display: flex;
+    padding-left: 16px;
+}
+
+.sidebar-container .sidebar-open,
+.sidebar-container .sidebar-shrink {
+    height: 100%;
 }
 
 .sidebar-open {
@@ -7,5 +19,5 @@
 }
 
 .sidebar-shrink {
-    width: 100px;
+    width: 80px;
 }

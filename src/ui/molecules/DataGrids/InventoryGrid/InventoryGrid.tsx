@@ -5,29 +5,43 @@ import { IconButton } from '@mui/material';
 import { ModalDataGridItem } from '@/ui/molecules/ModalDataGridItem';
 import { MeterItemResponse, TypeOfView } from '@/models';
 import './inventory_grid.css';
+import { ModalConfirmation } from '@/ui/Atoms/ModalConfirmation';
+import { useDeleteInventoryItem } from '@/customHooks/useDeleteInventoryItem';
 
 
 // increible 2horas viendo por que se moria
 const InventoryGridActions = memo(({ row }: Partial<GridRowParams>) => {
     const [open, setOpen] = useState(false);
+    const [openConfirmation, setOpenConfirmation] = useState(false);
     const [view, setView] = useState<TypeOfView>('view');
+    const onDeleteItem = useDeleteInventoryItem();
 
-    const showRow = () => {
+    const openItemModal = (openView: TypeOfView) => {
         console.log(row);
+        setView(openView);
         setOpen(true);
+    }
+
+    const handleDelete = () => {
+        setOpenConfirmation(true);
+    }
+
+    const deleteItem = async () => {
+        await onDeleteItem(row.id);
+        console.log('colocar snackbar success');
     }
 
     return (
         <div className="action-btns-grid">
-            <IconButton onClick={showRow}>
+            <IconButton onClick={() => openItemModal('view')}>
                 <SearchOutlined />
             </IconButton>
 
-            <IconButton>
+            <IconButton onClick={() => openItemModal('edit')}>
                 <EditOutlined />
             </IconButton>
 
-            <IconButton>
+            <IconButton onClick={handleDelete}>
                 <DeleteOutline />
             </IconButton>
 
@@ -37,6 +51,8 @@ const InventoryGridActions = memo(({ row }: Partial<GridRowParams>) => {
                 open={open}
                 setOpen={setOpen}
                 item={row} />
+
+            <ModalConfirmation msg='Desea eliminar el producto?' confirmAction={deleteItem} open={openConfirmation} setOpen={setOpenConfirmation} />
         </div>
     );
 })

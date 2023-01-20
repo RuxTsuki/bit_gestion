@@ -10,6 +10,7 @@ import { CustomSelect } from "@/ui/Atoms/CustomSelect";
 import { ModalConfirmation } from "@/ui/Atoms/ModalConfirmation";
 import { useState } from "react";
 import './inventory_grid_item_view.css';
+import { useDeleteInventoryItem } from "@/customHooks/useDeleteInventoryItem";
 
 type Props = {
     item: MeterItemResponse;
@@ -34,6 +35,7 @@ export const InventoryGridItemView = ({ item, view, setView, closeModal }: Props
     const [_, makeFetch] = useCustomFetch();
     const showSnackbar = useShowGlobalSnackbar();
     const dispatch = useInventoryGridDispatch();
+    const onDeleteItem = useDeleteInventoryItem()
 
     const { register, control, handleSubmit, getValues, reset, clearErrors, formState: { errors, isValid } } = useForm<MeterItemResponse>({
         defaultValues: { ...item }
@@ -76,19 +78,8 @@ export const InventoryGridItemView = ({ item, view, setView, closeModal }: Props
     const onDelete = async (wantContinue: boolean) => {
         if (!wantContinue) return;
 
-        const { url, fetchOpts } = deleteProduct(item.id)
-        const response = await makeFetch(url, fetchOpts);
-
-        if (!response.error) {
-            showSnackbar('Registro Eliminado', 'success');
-            dispatch({
-                type: InventoryGridStateActions.deleteDataItem,
-                payload: item.id
-            })
-        }
-
+        await onDeleteItem(item.id);
         closeModal('', 'CloseByAction');
-        return
     }
 
     const handleCancel = () => {

@@ -1,5 +1,5 @@
 import { Sidebar } from '@/ui/molecules/Sidebar'
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import './dashboard.css';
 import { useRedirectIfNotAuth } from '@/customHooks/useNavigateIfAuth';
 

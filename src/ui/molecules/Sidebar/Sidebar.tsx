@@ -1,5 +1,5 @@
-import InventoryOutlinedIcon from '@mui/icons-material/InventoryOutlined';
-import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
+
+import { InventoryOutlined, MenuOutlined } from '@mui/icons-material';
 import { IconButton, ListItemIcon, ListItemText, MenuItem, MenuList } from '@mui/material';
 import { useState } from 'react';
 import { NavLink } from "react-router-dom";
@@ -12,7 +12,7 @@ export const Sidebar = () => {
     const menuItem = [{
         path: 'inventory',
         name: 'Inventory',
-        icon: <InventoryOutlinedIcon />
+        icon: <InventoryOutlined />
     }]
 
     return (
@@ -22,7 +22,7 @@ export const Sidebar = () => {
             }>
                 <div className='top-section'>
                     <IconButton onClick={() => setOpen(oldValue => !oldValue)}>
-                        <MenuOutlinedIcon />
+                        <MenuOutlined />
                     </IconButton>
 
                     {open ? <h1>Enerbite</h1> : null}

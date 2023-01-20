@@ -2,12 +2,14 @@ import { ConditionOption, ConnectionTypeOption, MeterItemForUpdate, MeterItemRes
 import { CustomFieldBasic } from "@/ui/Atoms/Inputs";
 import { Controller, useForm } from "react-hook-form";
 import { ItemHeaderActions } from "./ItemHeaderActions";
-import { patchProduct } from '@/services';
-import './inventory_grid_item_view.css';
+import { deleteProduct, patchProduct } from '@/services';
 import { useCustomFetch } from "@/customHooks";
 import { useShowGlobalSnackbar } from "@/contexts/snackbar";
 import { InventoryGridStateActions, useInventoryGridDispatch } from "@/contexts/dataGrids/inventoryGrid";
 import { CustomSelect } from "@/ui/Atoms/CustomSelect";
+import { ModalConfirmation } from "@/ui/Atoms/ModalConfirmation";
+import { useState } from "react";
+import './inventory_grid_item_view.css';
 
 type Props = {
     item: MeterItemResponse;
@@ -28,8 +30,8 @@ const listStorageSystemOption: StorageSystemOption[] = ['externo', 'interno', ''
 const patternDate = RegExp(/^(?:\d{4})-(?:\d{2})-(?:\d{2})T(?:\d{2}):(?:\d{2}):(?:\d{2}(?:\.\d*)?)(?:(?:-(?:\d{2}):(?:\d{2})|Z)?)$/)
 
 export const InventoryGridItemView = ({ item, view, setView, closeModal }: Props) => {
-
-    const [fetchEditState, makeFetchToEdit] = useCustomFetch();
+    const [openConfirm, setOpenConfirm] = useState(false);
+    const [_, makeFetch] = useCustomFetch();
     const showSnackbar = useShowGlobalSnackbar();
     const dispatch = useInventoryGridDispatch();
 
@@ -54,7 +56,7 @@ export const InventoryGridItemView = ({ item, view, setView, closeModal }: Props
         }
 
         const { url, fetchOpts } = patchProduct(id, valuesToSave)
-        const response = await makeFetchToEdit(url, fetchOpts);
+        const response = await makeFetch(url, fetchOpts);
 
         if (!response.error) {
             showSnackbar('Registro Editado', 'success');
@@ -68,7 +70,25 @@ export const InventoryGridItemView = ({ item, view, setView, closeModal }: Props
     }
 
     const handleDelete = () => {
+        setOpenConfirm(true);
+    }
 
+    const onDelete = async (wantContinue: boolean) => {
+        if (!wantContinue) return;
+
+        const { url, fetchOpts } = deleteProduct(item.id)
+        const response = await makeFetch(url, fetchOpts);
+
+        if (!response.error) {
+            showSnackbar('Registro Eliminado', 'success');
+            dispatch({
+                type: InventoryGridStateActions.deleteDataItem,
+                payload: item.id
+            })
+        }
+
+        closeModal('', 'CloseByAction');
+        return
     }
 
     const handleCancel = () => {
@@ -285,6 +305,8 @@ export const InventoryGridItemView = ({ item, view, setView, closeModal }: Props
                     </div>
                 </div>
             </div>
+
+            <ModalConfirmation msg="Desea eliminar el producto?" open={openConfirm} setOpen={setOpenConfirm} confirmAction={onDelete} />
         </div>
     )
 }

@@ -9,12 +9,14 @@ import { AuthActions } from '@/contexts/auth/auth.types';
 import './login.css';
 import { UserLocalStorage } from '@/utils/defaults';
 import { PASSWORD_DEFAULT, USERNAME_DEFAULT } from '@/utils/userCredentials';
+import { useNavigate } from 'react-router-dom';
 
 
 export const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [msgLoginError, setMsgLoginError] = useState('');
     const dispatch = useAuthDispatch();
+    const navigateTo = useNavigate();
     const { register, handleSubmit, getValues, formState: { errors } } = useForm({
         defaultValues: {
             username: '',
@@ -28,6 +30,7 @@ export const Login = () => {
             localStorage.setItem(UserLocalStorage, JSON.stringify({ username, password }))
             dispatch({ type: AuthActions.loginSuccess, payload: { username, password } });
             setMsgLoginError('');
+            navigateTo('/dashboard/inventory');
             return;
         }
 

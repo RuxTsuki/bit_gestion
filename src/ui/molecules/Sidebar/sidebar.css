@@ -9,8 +9,9 @@
     padding-left: 16px;
 }
 
-.sidebar-container .sidebar-open,
-.sidebar-container .sidebar-shrink {
+.sidebar-container>div {
+    display: flex;
+    flex-direction: column;
     height: 100%;
 }
 
@@ -20,4 +21,11 @@
 
 .sidebar-shrink {
     width: 80px;
+}
+
+.sidebar-logout-container {
+    display: flex;
+    justify-content: center;
+    margin-top: auto;
+    padding-bottom: 26px;
 }

@@ -1,12 +1,16 @@
 
-import { InventoryOutlined, MenuOutlined } from '@mui/icons-material';
+import { InventoryOutlined, LogoutOutlined, MenuOutlined } from '@mui/icons-material';
 import { IconButton, ListItemIcon, ListItemText, MenuItem, MenuList } from '@mui/material';
 import { useState } from 'react';
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import './sidebar.css';
+import { useAuthDispatch } from '@/contexts/auth/hooks/useAuthContext';
+import { AuthActions } from '@/contexts/auth/auth.types';
+import { UserLocalStorage } from '@/utils/defaults';
 
 export const Sidebar = () => {
-
+    const dispatch = useAuthDispatch();
+    const navigateTo = useNavigate();
     const [open, setOpen] = useState(false);
 
     const menuItem = [{
@@ -14,6 +18,12 @@ export const Sidebar = () => {
         name: 'Inventory',
         icon: <InventoryOutlined />
     }]
+
+    const onLogout = () => {
+        localStorage.removeItem(UserLocalStorage);
+        dispatch({ type: AuthActions.logout });
+        navigateTo('/');
+    }
 
     return (
         <div className='sidebar-container'>
@@ -51,11 +61,12 @@ export const Sidebar = () => {
                         )
                     }
                 </MenuList>
-
+                <div className='sidebar-logout-container'>
+                    <IconButton onClick={onLogout}>
+                        <LogoutOutlined />
+                    </IconButton>
+                </div>
             </div>
-            <main>
-
-            </main>
         </div>
     )
 };

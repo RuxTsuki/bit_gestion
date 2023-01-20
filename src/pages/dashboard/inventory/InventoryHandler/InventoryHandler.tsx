@@ -42,7 +42,9 @@ export const InventoryHandler = () => {
             <header className='inventory-header'>
                 <h1>Inventory</h1>
 
-                <CreateInventoryItem />
+                <div>
+                    <CreateInventoryItem />
+                </div>
             </header>
 
             <div className='custom-line'></div>
@@ -52,7 +54,7 @@ export const InventoryHandler = () => {
             <div style={{ height: 400, width: '100%' }}>
                 <InventoryGrid data={dataToShow} />
             </div>
-            
+
         </>
     )
 }
